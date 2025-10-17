@@ -9,3 +9,22 @@ export interface Project {
   image?: string; // path under /public (optional), e.g., "/projects/resumetailor.png"
   featured?: boolean; // highlight on homepage (optional)
 }
+
+export interface Publication {
+  slug: string; // short id, used as key and future routes (e.g., "grounded-instruction-llms")
+  title: string;
+  authors: string[]; // ["E. Ogbadu", "C. Matuszek", ...]
+  venue: string; // "AAAI Fall Symposium"
+  year: number; // 2025
+  tags?: string[]; // ["HRI", "VLM", "Trustworthy AI"]
+  links?: {
+    pdf?: string; // "/papers/giullm.pdf" or external URL
+    doi?: string; // "https://doi.org/..."
+    code?: string; // repo link
+    poster?: string; // asset link (optional)
+    slides?: string; // asset link (optional)
+    video?: string; // talk/demo video
+  };
+  abstract?: string; // optional short summary
+  featured?: boolean; // for highlighting on home later
+}
