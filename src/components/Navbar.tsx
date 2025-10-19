@@ -13,12 +13,13 @@ export default function Navbar() {
 
   // Keeping links here (not in layout) makes it easy to reuse elsewhere later.
   const links = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Research", href: "/research" },
-  { name: "Projects", href: "/projects" },
-  { name: "Contact", href: "/contact" },
-];
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Research", href: "/research" },
+    { name: "Projects", href: "/projects" },
+    { name: "Resume", href: "/resume" },
+    { name: "Contact", href: "/contact" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800">

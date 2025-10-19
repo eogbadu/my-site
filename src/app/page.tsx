@@ -41,14 +41,6 @@ export default function HomePage() {
               >
                 Get in Touch
               </Link>
-
-              {/* A third, subtle action */}
-              <a
-                href="/resume.pdf"
-                className="text-sm underline underline-offset-4 hover:opacity-80"
-              >
-                Download Résumé
-              </a>
             </div>
             {/* social links row */}
             <SocialLinks />

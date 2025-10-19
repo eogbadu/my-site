@@ -28,3 +28,21 @@ export interface Publication {
   abstract?: string; // optional short summary
   featured?: boolean; // for highlighting on home later
 }
+
+export interface ResumeItem {
+  title: string;
+  org?: string;
+  location?: string;
+  period?: string; // e.g. "2025 — Present"
+  bullets?: string[]; // short points
+}
+
+export interface ResumeData {
+  name: string;
+  tagline?: string;
+  summary?: string;
+  sections: Array<{
+    heading: string;
+    items: ResumeItem[];
+  }>;
+}
