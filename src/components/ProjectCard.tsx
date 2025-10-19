@@ -24,7 +24,7 @@ export default function ProjectCard({ project: p }: Props) {
 
       <h2 className="text-lg font-semibold">{p.title}</h2>
 
-      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+      <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-3">
         {p.summary}
       </p>
 
@@ -47,7 +47,9 @@ export default function ProjectCard({ project: p }: Props) {
             href={p.url}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open ${p.title} live site in a new tab`}
+            title={`Open ${p.title} live site`}
           >
             Live
           </a>
@@ -57,7 +59,9 @@ export default function ProjectCard({ project: p }: Props) {
             href={p.repo}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open ${p.title} GitHub repository in a new tab`}
+            title={`Open ${p.title} repository`}
           >
             Repo
           </a>

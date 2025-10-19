@@ -18,7 +18,7 @@ export default function PublicationItem({ pub: p }: Props) {
       </p>
 
       {p.abstract && (
-        <p className="mt-3 text-sm text-slate-700 dark:text-slate-200 max-w-prose">
+        <p className="mt-3 text-sm text-slate-700 dark:text-slate-200 max-w-prose line-clamp-4">
           {p.abstract}
         </p>
       )}
@@ -44,7 +44,9 @@ export default function PublicationItem({ pub: p }: Props) {
             href={p.links.pdf}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open PDF for ${p.title} in a new tab`}
+            title={`Open PDF for ${p.title}`}
           >
             PDF
           </a>
@@ -54,7 +56,9 @@ export default function PublicationItem({ pub: p }: Props) {
             href={p.links.doi}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open DOI for ${p.title} in a new tab`}
+            title={`Open DOI for ${p.title}`}
           >
             DOI
           </a>
@@ -64,7 +68,9 @@ export default function PublicationItem({ pub: p }: Props) {
             href={p.links.code}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open code repository for ${p.title} in a new tab`}
+            title={`Open code for ${p.title}`}
           >
             Code
           </a>
@@ -74,7 +80,9 @@ export default function PublicationItem({ pub: p }: Props) {
             href={p.links.poster}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open poster for ${p.title} in a new tab`}
+            title={`Open poster for ${p.title}`}
           >
             Poster
           </a>
@@ -84,7 +92,9 @@ export default function PublicationItem({ pub: p }: Props) {
             href={p.links.slides}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open slide for ${p.title} in a new tab`}
+            title={`Open slide for ${p.title}`}
           >
             Slides
           </a>
@@ -94,7 +104,9 @@ export default function PublicationItem({ pub: p }: Props) {
             href={p.links.video}
             target="_blank"
             rel="noreferrer"
-            className="underline underline-offset-4 hover:opacity-80"
+            className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+            aria-label={`Open video for ${p.title} in a new tab`}
+            title={`Open video for ${p.title}`}
           >
             Video
           </a>

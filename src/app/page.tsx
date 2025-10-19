@@ -1,66 +1,78 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import FeaturedProjects from "@/components/FeaturedProjects";
+import FeaturedResearch from "@/components/FeaturedResearch";
+
 export default function HomePage() {
   return (
-    <section className="py-12 md:py-16">
-      <div className="grid items-center gap-8 md:grid-cols-2">
-        {/* Left: text content */}
-        <div className="space-y-6">
-          <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
-            AI/ML Engineer • Researcher • Builder
-          </p>
+    <>
+      <section className="py-12 md:py-16">
+        <div className="grid items-center gap-8 md:grid-cols-2">
+          {/* Left: text content */}
+          <div className="space-y-6">
+            <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+              AI/ML Engineer • Researcher • Builder
+            </p>
 
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-            Building trustworthy AI systems and delightful products
-          </h1>
+            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+              Building trustworthy AI systems and delightful products
+            </h1>
 
-          <p className="text-slate-600 dark:text-slate-300 max-w-prose">
-            I design, ship, and study AI systems — from secure RAG and
-            evaluation harnesses to multimodal HRI research. Currently a Senior
-            AI/ML Engineer (Associate) at Booz Allen and a graduate TA at UMBC.
-          </p>
+            <p className="text-slate-600 dark:text-slate-300 max-w-prose">
+              I design, ship, and study AI systems — from secure RAG and
+              evaluation harnesses to multimodal HRI research. Currently a
+              Senior AI/ML Engineer (Associate) at Booz Allen and a graduate TA
+              at UMBC.
+            </p>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/projects"
-              className="rounded-2xl px-5 py-2.5 text-sm font-semibold ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
-            >
-              See Projects
-            </Link>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/projects"
+                className="rounded-2xl px-5 py-2.5 text-sm font-semibold ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
+              >
+                See Projects
+              </Link>
 
-            <Link
-              href="/contact"
-              className="rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-2.5 text-sm font-semibold hover:opacity-90"
-            >
-              Get in Touch
-            </Link>
+              <Link
+                href="/contact"
+                className="rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-2.5 text-sm font-semibold hover:opacity-90"
+              >
+                Get in Touch
+              </Link>
 
-            {/* A third, subtle action */}
-            <a
-              href="/resume.pdf"
-              className="text-sm underline underline-offset-4 hover:opacity-80"
-            >
-              Download Résumé
-            </a>
+              {/* A third, subtle action */}
+              <a
+                href="/resume.pdf"
+                className="text-sm underline underline-offset-4 hover:opacity-80"
+              >
+                Download Résumé
+              </a>
+            </div>
+          </div>
+
+          {/* Right: image */}
+          <div className="mx-auto w-56 md:w-72">
+            <div className="relative aspect-square">
+              {/* soft glow background for depth */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500/20 via-fuchsia-500/20 to-cyan-500/20 blur-2xl" />
+              <Image
+                src="/avatar.png" // put an image file in /public/avatar.jpg
+                alt="Portrait"
+                fill
+                sizes="(min-width: 768px) 18rem, 14rem"
+                className="relative z-10 rounded-full object-cover ring-4 ring-white dark:ring-slate-900 shadow-2xl"
+              />
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Right: image */}
-        <div className="mx-auto w-56 md:w-72">
-          <div className="relative aspect-square">
-            {/* soft glow background for depth */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500/20 via-fuchsia-500/20 to-cyan-500/20 blur-2xl" />
-            <Image
-              src="/avatar.png" // put an image file in /public/avatar.jpg
-              alt="Portrait"
-              fill
-              sizes="(min-width: 768px) 18rem, 14rem"
-              className="relative z-10 rounded-full object-cover ring-4 ring-white dark:ring-slate-900 shadow-2xl"
-            />
-          </div>
-        </div>
+      {/* Featured strips */}
+      <div className="space-y-12">
+        <FeaturedProjects />
+        <FeaturedResearch />
       </div>
-    </section>
+    </>
   );
 }
