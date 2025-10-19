@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import FeaturedProjects from "@/components/FeaturedProjects";
 import FeaturedResearch from "@/components/FeaturedResearch";
+import SocialLinks from "@/components/SocialLinks";
 
 export default function HomePage() {
   return (
@@ -49,6 +50,8 @@ export default function HomePage() {
                 Download Résumé
               </a>
             </div>
+            {/* social links row */}
+            <SocialLinks />
           </div>
 
           {/* Right: image */}
