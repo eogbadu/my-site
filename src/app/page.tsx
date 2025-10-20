@@ -4,6 +4,7 @@ import Link from "next/link";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import FeaturedResearch from "@/components/FeaturedResearch";
 import SocialLinks from "@/components/SocialLinks";
+import Typewriter from "@/components/Typewriter";
 
 export default function HomePage() {
   return (
@@ -12,8 +13,22 @@ export default function HomePage() {
         <div className="grid items-center gap-8 md:grid-cols-2">
           {/* Left: text content */}
           <div className="space-y-6">
-            <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
-              AI/ML Engineer • Researcher • Builder
+            {/* 👇 Typewriter line */}
+            <p className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-300 via-cyan-500 to-gray-800 bg-clip-text text-transparent">
+              <Typewriter
+                words={[
+                  "AI/ML Engineer",
+                  "Computer Vision Engineer",
+                  "AI/ML Researcher",
+                  "Trustworthy AI Researcher",
+                  "Computer Vision Researcher",
+                  "HRI Researcher",
+                ]}
+                typingSpeed={100}
+                deletingSpeed={60}
+                pauseTime={2400}
+                loop
+              />
             </p>
 
             <h1 className="text-4xl md:text-5xl font-bold leading-tight">

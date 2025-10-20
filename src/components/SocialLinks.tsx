@@ -45,7 +45,7 @@ export default function SocialLinks() {
           aria-label={name}
           title={name}
           // expose a CSS var the icon can inherit via currentColor
-          style={{ ["--brand" as any]: color }}
+          style={{ "--brand": color } as React.CSSProperties}
           className="group text-slate-600 dark:text-slate-300 transition-transform hover:scale-110
                      focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md
                      hover:text-[var(--brand)]" // ← anchor color changes on hover

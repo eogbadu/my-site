@@ -87,3 +87,16 @@ body {
     page-break-inside: avoid;
   }
 }
+
+@keyframes caret {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+.animate-caret {
+  animation: caret 1s step-end infinite;
+}
