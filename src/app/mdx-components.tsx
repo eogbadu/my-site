@@ -1,4 +1,3 @@
-// src/mdx-components.tsx
 import type React from "react";
 import type { JSX as ReactJSX } from "react";
 
