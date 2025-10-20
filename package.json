@@ -16,6 +16,9 @@
     "react-dom": "19.1.0",
     "zod": "^4.1.12"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/line-clamp": "^0.4.4",
