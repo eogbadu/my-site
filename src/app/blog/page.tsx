@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { posts } from "../../data/posts";
+import { tagToSlug } from "@/lib/tags";
 
 export const metadata = {
   title: "Blog",
@@ -41,14 +42,18 @@ export default function BlogIndexPage() {
             )}
             {p.tags && p.tags.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-2">
-                {p.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="text-xs px-2 py-1 rounded-full ring-1 ring-slate-300 dark:ring-slate-700"
-                  >
-                    {t}
-                  </span>
-                ))}
+                {p.tags.map((t) => {
+                  const slug = tagToSlug(t);
+                  return (
+                    <a
+                      key={t}
+                      href={`/blog/tag/${slug}`}
+                      className="text-xs px-2 py-1 rounded-full ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
+                    >
+                      {t}
+                    </a>
+                  );
+                })}
               </div>
             )}
           </li>

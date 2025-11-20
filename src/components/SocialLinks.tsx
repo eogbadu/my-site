@@ -4,21 +4,15 @@ export default function SocialLinks() {
   const links = [
     {
       name: "LinkedIn",
-      href: "https://www.linkedin.com/in/yourprofile",
+      href: "https://www.linkedin.com/in/ekele-ogbadu",
       icon: Linkedin,
       color: "#0A66C2",
     },
     {
       name: "GitHub",
-      href: "https://github.com/yourhandle",
+      href: "https://github.com/eogbadu",
       icon: Github,
       color: "#181717",
-    },
-    {
-      name: "Twitter",
-      href: "https://twitter.com/yourhandle",
-      icon: Twitter,
-      color: "#1DA1F2",
     },
     {
       name: "Google Scholar",
@@ -28,7 +22,7 @@ export default function SocialLinks() {
     },
     {
       name: "Email",
-      href: "mailto:you@example.com",
+      href: "mailto:eogbadu1@umbc.edu",
       icon: Mail,
       color: "#EA4335",
     },

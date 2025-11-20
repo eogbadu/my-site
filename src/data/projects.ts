@@ -9,7 +9,7 @@ export const projects: Project[] = [
     tags: ["Next.js", "OpenAI", "PostgreSQL", "Tailwind"],
     url: "https://example.com", // replace later
     repo: "https://github.com/yourhandle/resumetailor", // optional
-    image: "/projects/resumetailor.png", // add later
+    image: "/projects/resumetailor_3.png", // add later
     featured: true,
   },
   {
@@ -19,6 +19,8 @@ export const projects: Project[] = [
       "Toolkit for multimodal HRI experiments and dataset benchmarking of instruction grounding.",
     tags: ["Python", "PyTorch", "Vision-Language", "Evaluation"],
     repo: "https://github.com/yourhandle/scout-plus-plus",
+    image: "/projects/scout.png", // add later
+    featured: true,
   },
   {
     slug: "fsr-release-planner",
@@ -26,5 +28,7 @@ export const projects: Project[] = [
     summary:
       "Constraint-aware scheduler for Field Service Representatives across multiple systems.",
     tags: ["TypeScript", "Algorithms", "UX"],
+    image: "/projects/fsrplanner.png", // add later
+    featured: true,
   },
 ];

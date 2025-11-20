@@ -10,7 +10,7 @@ export default function ResumePage() {
           <p className="text-slate-600 dark:text-slate-300">{resume.tagline}</p>
         )}
         {resume.summary && (
-          <p className="text-slate-700 dark:text-slate-200 max-w-prose">
+          <p className="text-slate-700 dark:text-slate-200 max-w-prose text-justify hyphens-auto">
             {resume.summary}
           </p>
         )}
@@ -20,8 +20,13 @@ export default function ResumePage() {
 
       <div className="space-y-8 print:space-y-4">
         {resume.sections.map((section) => (
-          <section key={section.heading} className="space-y-4 break-inside-avoid">
-            <h2 className="text-2xl font-semibold print:text-xl">{section.heading}</h2>
+          <section
+            key={section.heading}
+            className="space-y-4 break-inside-avoid"
+          >
+            <h2 className="text-2xl font-semibold print:text-xl">
+              {section.heading}
+            </h2>
             <ul className="space-y-4">
               {section.items.map((item, idx) => (
                 <li
@@ -33,12 +38,16 @@ export default function ResumePage() {
                       <p className="font-semibold">{item.title}</p>
                       {(item.org || item.location) && (
                         <p className="text-sm text-slate-600 dark:text-slate-300">
-                          {[item.org, item.location].filter(Boolean).join(" — ")}
+                          {[item.org, item.location]
+                            .filter(Boolean)
+                            .join(" — ")}
                         </p>
                       )}
                     </div>
                     {item.period && (
-                      <span className="text-xs text-slate-500">{item.period}</span>
+                      <span className="text-xs text-slate-500">
+                        {item.period}
+                      </span>
                     )}
                   </div>
 
