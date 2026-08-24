@@ -10,7 +10,7 @@ Setup, environment, deploy procedures, and the action items only a human can do.
 
 | # | Action | Needed before | Status |
 |---|---|---|---|
-| H1 | **Rotate the IONOS SMTP password** for `contact@ekeleogbadu.io`; update `SMTP_PASS` in Vercel **and** `.env.local` | Anytime | ⬜ |
+| H1 | **Set the working `SMTP_PASS` in Vercel** and confirm `SMTP_USER=contact@ekeleogbadu.io` there, then redeploy. Local is done and verified | **Now** | 🟡 half done |
 | H2 | Vercel → **Storage → Neon (Marketplace)** → create DB. Enable branch-per-preview | Phase 7 | ⬜ |
 | H3 | `npm i -g vercel && vercel link && vercel env pull .env.local` | Phase 7 | ⬜ |
 | H4 | Create **two** GitHub OAuth Apps (one callback URL each) | Phase 8 | ⬜ |

@@ -182,7 +182,7 @@ the honeypot must survive validation to be handled deliberately.
 
 ---
 
-### 🔴 E14 — SMTP is broken in BOTH local and production — the contact form delivers nothing
+### ✅ E14 — Contact form delivered nothing: the sending mailbox did not exist
 Two independent problems, both confirmed by live testing:
 
 1. `SMTP_HOST=smtp.example.com` — a placeholder. The code's `smtp.ionos.com` fallback
@@ -235,9 +235,36 @@ required. Stopped after three auth attempts to avoid triggering a block.
 **Tooling added:** `scripts/check-smtp.mjs` verifies credentials in seconds without a
 deploy, and maps `err.code` to a specific hint (EAUTH/EDNS/ETIMEDOUT/ECONNECTION).
 
-**Plausible contributing factor:** until Phase 1 the endpoint had no rate limiting (E2), so
-bot submissions may have been driving continuous failed SMTP logins — which is exactly what
-gets a mailbox blocked. The rate limiter now caps that at 5 per 10 minutes per client.
+**ROOT CAUSE (2026-08-25): `contact@ekeleogbadu.io` had never been created.**
+
+Every other hypothesis was wrong. It was not a rotated password, not a blocked account, not
+disabled SMTP access — `SMTP_USER` pointed at a mailbox that did not exist, so IONOS
+answered `535` to every login. The contact form has therefore *never* delivered a message.
+
+**Resolution:** the user created the mailbox in the IONOS panel and set `SMTP_PASS` in
+`.env.local`. Verified locally:
+```
+✓ SMTP authentication succeeded.
+✓ Test message sent: <cb9b70aa-...@ekeleogbadu.io>
+
+POST /api/contact  (valid body)  ->  {"ok":true}  [200]
+[contact] sent <ce687bd4-...@ekeleogbadu.io>          # messageId only, no PII
+```
+
+**Also corrected:** `MAIL_TO` was `contact@ekeleogbadu.io` locally but
+`eogbadu@umbc.edu` in Vercel. Local now matches production. Deleted `.env.local.bak`,
+which still held the stale password.
+
+**Still required:** set the working `SMTP_PASS` in **Vercel** and confirm `SMTP_USER` there
+is `contact@ekeleogbadu.io`, then redeploy. Until then production still 500s.
+
+**Diagnostic lesson:** a `535` means "authentication failed", which reads as *bad password*
+and pulls you toward rotating credentials. A nonexistent account produces the identical
+response. Confirming the account exists should come before rotating its password.
+
+**Note on the earlier theory:** until Phase 1 the endpoint had no rate limiting (E2), so bot
+submissions could drive continuous failed SMTP logins. That was a plausible cause of a
+*block*, but was not what happened here. The rate limiter is still worth having.
 
 **Note:** the failure path itself behaved correctly — graceful 500, generic message to
 the client, real error logged server-side, and **no submitter email address in the log**
