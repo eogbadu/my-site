@@ -1,11 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { posts } from "../../data/posts";
-import { tagToSlug } from "@/lib/tags";
 
-export const metadata = {
+import { posts } from "@/data/posts";
+import { tagToSlug } from "@/lib/tags";
+import { buildMetadata } from "@/lib/metadata";
+
+export const metadata: Metadata = buildMetadata({
   title: "Blog",
-  description: "Notes, write-ups, and progress logs.",
-};
+  description: "Essays, experiments, and build logs on AI/ML engineering and research.",
+  path: "/blog",
+});
 
 export default function BlogIndexPage() {
   // newest first

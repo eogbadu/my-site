@@ -9,7 +9,7 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 |---|---|---|---|---|
 | 1 | Contact form: fix crash + restore hardening | ✅ | `c20e98a` | Mail delivery unverifiable locally — see ERRORS E14 |
 | 2 | Config, styling, build hygiene | ✅ | `143d5fc` | Fixed E4–E9; lint now fully clean |
-| 3 | `siteConfig` + full SEO pass | ⬜ | — | Blocked on H9 (real URLs) for the placeholder fix |
+| 3 | `siteConfig` + full SEO pass | ✅ | `8bf9ca4` | Placeholder URLs (H9) still pending — deferred to Phase 4 |
 | 4 | Accessibility + images | ⬜ | — | Needs H8 (image compression) |
 | 5 | Dark mode toggle | ⬜ | — | **Requires Phase 2 first** (unlayered `body{}` fix) |
 | 6 | De-client `/about` + `/projects/[slug]` | ⬜ | — | |
@@ -122,6 +122,31 @@ unstyled), and rewrote the README, which was still `create-next-app` boilerplate
 | Footer | renders `© 2025–present Ekele Ogbadu. All rights reserved.` |
 | `<html>` | carries the Geist + Geist Mono variable classes |
 | All 10 routes | `200`; unknown path `404` |
+
+### 2026-08-25 — Phase 3 complete
+
+Fixed **E11** (no SEO surface) and found/fixed **E17** along the way.
+
+Created `src/config/site.ts` as the single source of truth and wired it into Navbar,
+SocialLinks, Footer, ResumeActions, the homepage hero, and the root metadata — those values
+had been duplicated across six files.
+
+| Added | Verified |
+|---|---|
+| `metadataBase` + title template + OG/Twitter/robots | `<title>Projects · Ekele Ogbadu</title>`, canonical on every page |
+| Per-page metadata for all 6 routes that had none | titles/canonicals confirmed on all 10 routes |
+| `src/lib/metadata.ts` (`buildMetadata`) | `og:image` count exactly 1 on all 10 routes |
+| `sitemap.ts` | `/sitemap.xml` → 200, absolute www URLs, includes posts + tags |
+| `robots.ts` | `/robots.txt` → 200, disallows `/api/` and `/admin`, points at sitemap |
+| `opengraph-image.tsx` | real 1200×630 PNG, 184 KB |
+| `not-found` / `error` / `global-error` / `loading` | `/does-not-exist` → 404 with branded page |
+
+`/about` and `/contact` are client components and cannot export `metadata`, so each got a
+route `layout.tsx`. The `/about` one is removed in Phase 6 when the page becomes a server
+component.
+
+**Also fixed:** `ResumeActions.copyLink` used `window.location.origin`, which on the apex
+produces a URL that 307-redirects; it now shares the canonical origin.
 
 ## Phase completion checklist
 

@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { projects } from "@/data/projects";
 import ProjectCard from "@/components/ProjectCard";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Projects",
+  description:
+    "Selected engineering projects — AI-powered tools, multimodal research toolkits, and production ML systems.",
+  path: "/projects",
+});
 
 export default function ProjectsPage() {
   return (

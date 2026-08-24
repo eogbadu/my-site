@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { posts } from "@/data/posts";
 import { tagToSlug, slugToLabel } from "@/lib/tags";
+import { buildMetadata } from "@/lib/metadata";
 
 // Next 15: `params` is a Promise. Reading it synchronously works today only via a
 // deprecation shim that is removed in Next 16.
@@ -21,10 +22,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { tag } = await params;
   const label = slugToLabel(tag);
-  return {
+  return buildMetadata({
     title: `Tag: ${label}`,
-    description: `Posts tagged with ${label}`,
-  };
+    description: `Blog posts tagged with ${label}.`,
+    path: `/blog/tag/${tag}`,
+  });
 }
 
 export default async function TagPage({ params }: Props) {

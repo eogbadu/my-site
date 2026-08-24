@@ -145,13 +145,17 @@ A broken Google Scholar link on a researcher's homepage is worse than no link.
 
 ---
 
-### 🔴 E11 — No SEO surface at all
+### ✅ E11 — No SEO surface at all
 Verified live: `/robots.txt` → **404**, `/sitemap.xml` → **404**, and the homepage HTML
 contains **zero** `og:` or `twitter:` meta tags. Six of eight routes export no metadata.
 
 **Consequence:** every link shared to LinkedIn/Slack renders as a bare URL, and search
 results show the same generic title for every page.
-**Fix:** Phase 3.
+**Fixed in Phase 3.** Added `metadataBase` (canonical www origin), a title template,
+per-page metadata for all six routes that had none, `sitemap.ts`, `robots.ts`, a generated
+`opengraph-image.tsx`, and `not-found`/`error`/`global-error`/`loading` boundaries.
+**Verified:** `og:image` now present on all 10 pages; `/robots.txt` and `/sitemap.xml`
+return 200 with absolute www URLs; the OG route serves a real 1200×630 PNG.
 
 ---
 
@@ -339,6 +343,25 @@ production `next start` smoke test returned 200 on all 10 routes and 404 on an u
 
 ---
 
+### ✅ E17 — Declaring `openGraph` on a page silently drops the inherited OG image
+Found while verifying Phase 3, not from the original audit.
+
+Next's `opengraph-image.tsx` file convention injects `openGraph.images` for a segment and
+its children — **but a page that declares its own `openGraph` object replaces the inherited
+one wholesale, image included.**
+
+Observed directly: `/blog` (no `openGraph` key) kept `og:image`, while `/projects` (which
+set `openGraph` for a custom title) had **none**. Same site, same build, silently
+inconsistent — and invisible until someone shares that specific link.
+
+**Fix:** `src/lib/metadata.ts` exports `buildMetadata({ title, description, path })`, which
+always sets `images`, canonical, and matching Twitter tags. Every page and the two route
+layouts now route through it, so the image cannot be dropped by accident.
+
+**Verified:** `og:image` count is exactly 1 on all 10 routes.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -355,3 +378,9 @@ production `next start` smoke test returned 200 on all 10 routes and 404 on an u
   found 28 more closed by the same patch line. Always check `fixAvailable` yourself (E16).
 - **`npm audit` flagging a package doesn't mean the package is at fault.** Check `via` —
   `next` stayed flagged only because of bundled `postcss`/`sharp` (E16).
+- **Next metadata objects replace, they don't deep-merge.** Declaring `openGraph` on a page
+  drops inherited fields including the file-convention image (E17).
+- **A 535 SMTP response means "auth failed", which reads as *wrong password* — but a
+  nonexistent mailbox returns the same code.** Confirm the account exists before rotating
+  its credentials (E14).
+- **Client components cannot export `metadata`.** Use a route `layout.tsx` for that segment.

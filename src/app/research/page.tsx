@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { publications } from "@/data/research";
 import { groupPublicationsByYear } from "@/lib/group";
 import PublicationItem from "@/components/PublicationItem";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Research",
+  description:
+    "Publications and works in progress on trustworthy AI, vision-language models, and human-robot interaction.",
+  path: "/research",
+});
 
 export default function ResearchPage() {
   const groups = groupPublicationsByYear(publications);

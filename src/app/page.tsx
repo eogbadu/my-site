@@ -5,6 +5,14 @@ import FeaturedProjects from "@/components/FeaturedProjects";
 import FeaturedResearch from "@/components/FeaturedResearch";
 import SocialLinks from "@/components/SocialLinks";
 import Typewriter from "@/components/Typewriter";
+import { siteConfig } from "@/config/site";
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  // Home keeps the default (untemplated) title from the root layout.
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (
@@ -16,14 +24,7 @@ export default function HomePage() {
             {/* 👇 Typewriter line */}
             <p className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-gray-300 via-cyan-500 to-gray-800 bg-clip-text text-transparent">
               <Typewriter
-                words={[
-                  "AI/ML Engineer",
-                  "Computer Vision Engineer",
-                  "AI/ML Researcher",
-                  "Trustworthy AI Researcher",
-                  "Computer Vision Researcher",
-                  "HRI Researcher",
-                ]}
+                words={[...siteConfig.roles]}
                 typingSpeed={100}
                 deletingSpeed={60}
                 pauseTime={2400}
@@ -67,8 +68,8 @@ export default function HomePage() {
               {/* soft glow background for depth */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500/20 via-fuchsia-500/20 to-cyan-500/20 blur-2xl" />
               <Image
-                src="/avatar.png" // put an image file in /public/avatar.jpg
-                alt="Portrait"
+                src={siteConfig.avatar}
+                alt={siteConfig.name}
                 fill
                 sizes="(min-width: 768px) 18rem, 14rem"
                 className="relative z-10 rounded-full object-cover ring-4 ring-white dark:ring-slate-900 shadow-2xl"

@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/metadata";
 import { resume } from "@/data/resume";
 import ResumeActions from "@/components/ResumeActions";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Resume",
+  description:
+    "Experience, education, and technical proficiencies of Ekele Ogbadu, AI/ML Engineer and researcher.",
+  path: "/resume",
+});
 
 export default function ResumePage() {
   return (

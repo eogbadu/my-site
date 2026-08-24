@@ -1,11 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
 import { posts } from "@/data/posts";
 import { tagToSlug, slugToLabel } from "@/lib/tags";
+import { buildMetadata } from "@/lib/metadata";
 
-export const metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "Blog tags",
-  description: "Browse posts by topic.",
-};
+  description: "Browse blog posts by topic.",
+  path: "/blog/tag",
+});
 
 export default function TagIndexPage() {
   const counts = new Map<string, number>();

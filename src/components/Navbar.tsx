@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { siteConfig } from "@/config/site";
+
 /**
  * Why this component uses "use client":
  * - We need useState to open/close the mobile menu.
@@ -11,23 +13,14 @@ import { useState } from "react";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
-  // Keeping links here (not in layout) makes it easy to reuse elsewhere later.
-  const links = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Research", href: "/research" },
-    { name: "Projects", href: "/projects" },
-    { name: "Blog", href: "/blog" },
-    { name: "Resume", href: "/resume" },
-    { name: "Contact", href: "/contact" },
-  ];
+  const links = siteConfig.nav;
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800">
       <nav className="mx-auto max-w-6xl px-4 h-14 flex items-center justify-between">
         {/* Brand (why Link? avoids full page reload, keeps client state) */}
         <Link href="/" className="font-semibold tracking-tight">
-          E. Ogbadu
+          {siteConfig.shortName}
         </Link>
 
         {/* Desktop nav */}

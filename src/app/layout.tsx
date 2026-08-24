@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { siteConfig } from "@/config/site";
 
 /**
  * These `variable` names are what globals.css maps `--font-sans` / `--font-mono`
@@ -23,8 +24,47 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ekele Ogbadu — Portfolio",
-  description: "AI/ML Engineer • Researcher • Builder",
+  // Makes every relative URL below (and in child pages) resolve against the
+  // canonical www origin. Without it, Next emits relative OG urls that crawlers
+  // and link unfurlers cannot resolve.
+  metadataBase: new URL(siteConfig.url),
+
+  title: {
+    default: siteConfig.title,
+    template: siteConfig.titleTemplate,
+  },
+  description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.author.name, url: siteConfig.url }],
+  creator: siteConfig.author.name,
+  alternates: { canonical: "/" },
+
+  openGraph: {
+    type: "website",
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export default function RootLayout({

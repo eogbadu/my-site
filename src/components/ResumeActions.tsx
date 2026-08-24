@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 
+import { siteConfig, absoluteUrl } from "@/config/site";
+
 export default function ResumeActions() {
   const [copied, setCopied] = useState<null | "ok" | "fail">(null);
 
   async function copyLink() {
     try {
-      const url = `${window.location.origin}/resume.pdf`;
+      // Deliberately not window.location.origin: on the apex that yields a URL
+      // which 307-redirects to www. Share the canonical origin instead.
+      const url = absoluteUrl(siteConfig.resumePdf);
       await navigator.clipboard.writeText(url);
       setCopied("ok");
       setTimeout(() => setCopied(null), 2000);
@@ -24,7 +28,7 @@ export default function ResumeActions() {
   return (
     <div className="flex flex-wrap gap-3">
       <a
-        href="/resume.pdf"
+        href={siteConfig.resumePdf}
         target="_blank"
         className="rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-2.5 text-sm font-semibold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-slate-400"
         aria-label="Download PDF resume"
