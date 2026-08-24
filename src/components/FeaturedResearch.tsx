@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { publications } from "@/data/research";
 
 export default function FeaturedResearch() {
@@ -12,9 +14,9 @@ export default function FeaturedResearch() {
         <p className="text-sm text-slate-600 dark:text-slate-300">
           Highlights from publications and works in progress. See the full list
           on{" "}
-          <a className="underline underline-offset-4" href="/research">
+          <Link className="underline underline-offset-4" href="/research">
             Research
-          </a>
+          </Link>
           .
         </p>
       </header>

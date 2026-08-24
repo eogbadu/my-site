@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { absoluteUrl } from "@/config/site";
 import { posts } from "@/data/posts";
+import { projects } from "@/data/projects";
 import { tagToSlug } from "@/lib/tags";
 
 /**
@@ -22,6 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/contact"), changeFrequency: "yearly", priority: 0.5 },
   ];
 
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
+    url: absoluteUrl(`/projects/${p.slug}`),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
   const published = posts.filter((p) => !p.draft);
 
   const postRoutes: MetadataRoute.Sitemap = published.map((p) => ({
@@ -39,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.3,
   }));
 
-  return [...staticRoutes, ...postRoutes, ...tagRoutes];
+  return [...staticRoutes, ...projectRoutes, ...postRoutes, ...tagRoutes];
 }
 
 export const revalidate = 3600;

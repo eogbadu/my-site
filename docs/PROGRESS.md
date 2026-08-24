@@ -12,7 +12,7 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 3 | `siteConfig` + full SEO pass | ✅ | `8bf9ca4` | Placeholder URLs (H9) still pending — deferred to Phase 4 |
 | 4 | Accessibility + images | ✅ | `a2d9b87` | Images compressed in-repo; H8 no longer needed |
 | 5 | Dark mode toggle | ⬜ | — | **Requires Phase 2 first** (unlayered `body{}` fix) |
-| 6 | De-client `/about` + `/projects/[slug]` | ⬜ | — | |
+| 6 | De-client `/about` + `/projects/[slug]` | ✅ | `36d382d` | Also fixed a pre-existing soft 404 (E19) |
 | 7 | Database foundation | ⬜ | — | Needs H2, H3. **Branch + Preview** |
 | 8 | Auth + admin shell | ⬜ | — | Needs H4, H5. **Branch + Preview** |
 | 9 | Admin CRUD + MDX renderer | ⬜ | — | **Branch + Preview** |
@@ -168,6 +168,27 @@ Verified: exactly **1** preload tag on `/` (the hero avatar), **0** on `/project
 
 **Also:** added TimeSense as the flagship project (first + featured), and deleted the five
 unreferenced `create-next-app` SVGs.
+
+### 2026-08-25 — Phase 6 complete
+
+**`/about` is a server component again.** Extracted `src/components/Tabs.tsx` (client) and
+pass the panels in as server-rendered JSX, so all three tabs' prose ships as crawlable HTML
+— verified all three panels present in the response. Full WAI-ARIA tabs: 3 `role="tab"`,
+3 `role="tabpanel"`, 2 hidden, 1 `aria-selected="true"`, roving tabindex, arrow/Home/End
+keys. Its route `layout.tsx` (a Phase 3 workaround) is gone since the page exports its own
+metadata now.
+
+**`/projects/[slug]`** — 4 pages prerendered, each with hero image, highlights, background
+prose, stack, links, optional gallery and video. The TimeSense demo video now renders with
+`preload="none"` so the 2.7 MB file stays off the initial load. `resumetailor_1/_2.webp`
+finally have a purpose as the ResumeTailor gallery.
+
+**Fixed a pre-existing soft 404** — see ERRORS E19.
+
+**Also:** restored ResumeTailor's repo link now that `job-matching-platform` is public
+(verified 200 anonymously); converted three internal `<a>` tags to `next/link` (one was a
+lint *error*, not a warning); added project pages to the sitemap; **unfeatured FSR Release
+Planner** so `/` shows 3 cards and `/projects` shows 4 — they were identical before.
 
 ## Phase completion checklist
 

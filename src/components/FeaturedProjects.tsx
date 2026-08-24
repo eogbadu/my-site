@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import ProjectCard from "@/components/ProjectCard";
 import { projects } from "@/data/projects";
 
@@ -12,9 +14,9 @@ export default function FeaturedProjects() {
         <h2 className="text-2xl font-semibold">Featured Projects</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">
           A snapshot of recent work. See more on the{" "}
-          <a className="underline underline-offset-4" href="/projects">
+          <Link className="underline underline-offset-4" href="/projects">
             Projects
-          </a>{" "}
+          </Link>{" "}
           page.
         </p>
       </header>

@@ -423,6 +423,40 @@ user has no way to detect the lie.
 
 ---
 
+### ✅ E19 — Soft 404: `notFound()` in a dynamic segment returned HTTP 200
+Found while testing the new `/projects/[slug]` route, and it turned out to be
+**pre-existing on `/blog/tag/[tag]`** too.
+
+When a dynamic segment has `generateStaticParams` and `dynamicParams` is left at its
+default of `true`, an unknown param is rendered on demand. Calling `notFound()` there
+rendered the branded 404 page but still responded **HTTP 200**:
+
+```
+/projects/nope   -> 200   <title>Project not found</title>
+/blog/tag/zzz    -> 200
+/totally-unknown -> 404   (a genuinely unmatched route was fine)
+```
+
+A soft 404 tells crawlers the page exists, so search engines index unlimited junk URLs.
+
+**Fix:** `export const dynamicParams = false` on both routes. Every valid slug is known
+at build time, so unlisted ones should 404 outright rather than render.
+
+```
+/projects/timesense -> 200      /projects/nope -> 404
+/blog/tag/meta      -> 200      /blog/tag/zzz  -> 404
+```
+
+⚠️ **Phase 10 must remove this from `/blog/tag/[tag]`.** Once posts live in the database,
+tags are no longer known at build time, and `dynamicParams = false` would 404 every tag
+page created after the last deploy.
+
+**Debugging note that cost time:** the first fix appeared not to work because `next start`
+was still serving a stale `.next`. Rebuilding from a clean `.next` showed it had worked all
+along. When a Next config export seems to have no effect, rebuild clean before doubting it.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -448,3 +482,9 @@ user has no way to detect the lie.
 - **Never write alt text from a filename.** Open the image (E18).
 - **A huge PNG is usually badly encoded, not oversized.** Check dimensions before assuming
   a resize is the fix (E18).
+- **`notFound()` under `generateStaticParams` yields a soft 404 (HTTP 200)** unless
+  `dynamicParams = false` (E19).
+- **`next start` happily serves a stale `.next`.** Rebuild clean before concluding a change
+  had no effect (E19).
+- **Internal `<a href="/...">` forces a full page reload.** Use `next/link`; eslint's
+  `@next/next/no-html-link-for-pages` catches it.

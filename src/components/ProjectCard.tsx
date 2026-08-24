@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+
 import type { Project } from "@/types/content";
 
 interface Props {
@@ -17,7 +19,12 @@ export default function ProjectCard({ project: p, eager = false }: Props) {
     <li className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 hover:shadow-sm transition">
       {/* Optional image */}
       {p.image ? (
-        <div className="mb-3 relative w-full aspect-video overflow-hidden rounded-xl">
+        <Link
+          href={`/projects/${p.slug}`}
+          className="mb-3 block relative w-full aspect-video overflow-hidden rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-400"
+          tabIndex={-1}
+          aria-hidden="true"
+        >
           <Image
             src={p.image}
             alt={p.imageAlt ?? `${p.title} screenshot`}
@@ -26,10 +33,17 @@ export default function ProjectCard({ project: p, eager = false }: Props) {
             className="object-cover"
             priority={eager}
           />
-        </div>
+        </Link>
       ) : null}
 
-      <h2 className="text-lg font-semibold">{p.title}</h2>
+      <h2 className="text-lg font-semibold">
+        <Link
+          href={`/projects/${p.slug}`}
+          className="hover:underline underline-offset-4 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+        >
+          {p.title}
+        </Link>
+      </h2>
 
       <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-3">
         {p.summary}
@@ -73,9 +87,12 @@ export default function ProjectCard({ project: p, eager = false }: Props) {
             Repo
           </a>
         )}
-        {!p.url && !p.repo && (
-          <span className="text-slate-500">Details coming soon</span>
-        )}
+        <Link
+          href={`/projects/${p.slug}`}
+          className="underline underline-offset-4 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md"
+        >
+          Details
+        </Link>
       </div>
     </li>
   );

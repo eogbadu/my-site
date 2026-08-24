@@ -9,6 +9,12 @@ import { buildMetadata } from "@/lib/metadata";
 // deprecation shim that is removed in Next 16.
 type Props = { params: Promise<{ tag: string }> };
 
+// Tags all come from the static posts registry, so an unlisted tag should 404
+// rather than render on demand. Without this, notFound() returned HTTP 200 — a
+// soft 404. NOTE: Phase 10 moves posts to the database and removes
+// generateStaticParams here, at which point this must go too.
+export const dynamicParams = false;
+
 // Pre-build pages for each known tag (based on your posts registry)
 export function generateStaticParams() {
   const set = new Set<string>();

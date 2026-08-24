@@ -49,13 +49,13 @@ export default function BlogIndexPage() {
                 {p.tags.map((t) => {
                   const slug = tagToSlug(t);
                   return (
-                    <a
+                    <Link
                       key={t}
                       href={`/blog/tag/${slug}`}
-                      className="text-xs px-2 py-1 rounded-full ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
+                      className="text-xs px-2 py-1 rounded-full ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
                     >
                       {t}
-                    </a>
+                    </Link>
                   );
                 })}
               </div>

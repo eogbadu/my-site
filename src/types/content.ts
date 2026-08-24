@@ -1,16 +1,38 @@
 // Avoid 'any' — keep shapes explicit and reusable.
+
+export interface ProjectLink {
+  label: string;
+  href: string;
+}
+
+export interface GalleryImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface Project {
-  slug: string; // used for links or keys (e.g., "resumetailor")
+  slug: string; // used for links and as the /projects/[slug] route segment
   title: string;
   summary: string; // 1–2 sentences, used on cards
-  tags: string[]; // e.g., ["Next.js", "PostgreSQL"]
-  url?: string; // external link (optional)
+  tags: string[]; // short filter facets, e.g., ["Next.js", "PostgreSQL"]
+  url?: string; // live site (optional)
   repo?: string; // GitHub link (optional)
   image?: string; // path under /public (optional), e.g., "/projects/resumetailor_3.webp"
-  imageAlt?: string; // describes the screenshot; falls back to the title if absent
+  imageAlt?: string; // describes the image; falls back to the title if absent
   video?: string; // demo video under /public, e.g. "/video/timesense-demo.mp4"
   videoPoster?: string; // still shown before the video plays
   featured?: boolean; // highlight on homepage (optional)
+
+  // --- detail page (/projects/[slug]) ---
+  year?: string; // "2026" or "2024—2025"
+  role?: string; // "Solo build" | "Lead engineer"
+  status?: "active" | "shipped" | "archived";
+  stack?: string[]; // full technology list; `tags` stays the short facet set
+  highlights?: string[]; // 3–5 bullets
+  body?: string; // long-form description, plain paragraphs split on blank lines
+  gallery?: GalleryImage[];
+  links?: ProjectLink[]; // extra links beyond url/repo
 }
 
 export interface Publication {
