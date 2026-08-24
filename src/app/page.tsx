@@ -37,10 +37,10 @@ export default function HomePage() {
             </h1>
 
             <p className="text-slate-600 dark:text-slate-300 max-w-prose">
-              I design, ship, and study AI systems — from secure RAG and
-              evaluation harnesses to multimodal HRI research. Currently a
-              Senior AI/ML Engineer (Associate) at Booz Allen and a graduate TA
-              at UMBC.
+              I design, ship, and study AI systems — from agentic workflows and
+              retrieval-augmented pipelines to multimodal human-robot interaction
+              research. Currently a Lead AI/ML Engineer at Booz Allen Hamilton and a
+              Ph.D. candidate at UMBC.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">

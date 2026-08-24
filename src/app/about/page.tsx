@@ -110,14 +110,14 @@ export default function AboutPage() {
           </p>
 
           <p className="text-slate-600 dark:text-slate-300">
-            I currently serve as a <strong>Senior AI/ML Engineer</strong> at Booz Allen
-            Hamilton in a cleared role, where I design and support machine-learning
-            capabilities for high-impact programs. My work spans model evaluation, data
-            pipelines, automation, and applied ML system design. Before transitioning
-            into this role, I spent a year as a Senior Agile Engineer and Release
-            Manager, coordinating complex software releases across multiple systems and
-            leading initiatives that improved operational efficiency and delivery
-            reliability.
+            I currently serve as a <strong>Lead AI/ML Engineer</strong> at Booz Allen
+            Hamilton, where I lead AI/ML training, tool development, and platform
+            enablement, and design LLM-enabled and RAG-style workflows for tagging,
+            semantic retrieval, and knowledge discovery. Before this I built the team&rsquo;s
+            ontology-driven tagging pipeline end to end, and prior to that spent a year as
+            a Senior Agile Engineer and Release Manager on a $200M program, where I cut
+            average days-to-completion from 167 to 36 and blocked-release time from 250
+            days to zero.
           </p>
 
           <p className="text-slate-600 dark:text-slate-300">

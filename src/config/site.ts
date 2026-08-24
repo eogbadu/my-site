@@ -35,11 +35,11 @@ export const siteConfig = {
    */
   url: "https://www.ekeleogbadu.io",
 
-  title: "Ekele Ogbadu — AI/ML Engineer & Researcher",
+  title: "Ekele Ogbadu — Lead AI/ML Engineer & Researcher",
   /** `%s` is replaced by each page's own title. */
   titleTemplate: "%s · Ekele Ogbadu",
   description:
-    "AI/ML Engineer and researcher working on trustworthy AI, computer vision, and multimodal human-robot interaction.",
+    "Lead AI/ML Engineer and researcher working on agentic AI, retrieval systems, and multimodal human-robot interaction.",
 
   locale: "en_US",
   /** Rendered as "© {year}–present". Static by design — see Footer. */
@@ -48,7 +48,7 @@ export const siteConfig = {
   author: {
     name: "Ekele Ogbadu",
     email: "eogbadu1@umbc.edu",
-    jobTitle: "Senior AI/ML Engineer",
+    jobTitle: "Lead AI/ML Engineer",
     affiliation: "Booz Allen Hamilton · UMBC",
   },
 

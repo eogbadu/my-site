@@ -5,8 +5,8 @@ export const publications: Publication[] = [
     slug: "grounded-instruction-llms",
     title:
       "Grounded Instruction Understanding with Large Language Models: Toward Trustworthy Human-Robot Interaction",
-    authors: ["E. Ogbadu", "S. Lukin", "C. Matuszek"],
-    venue: "AAAI 2025 Fall Symposium",
+    authors: ["Ekele Ogbadu", "Stephanie Lukin", "Cynthia Matuszek"],
+    venue: "AAAI Symposium Series 7(1), 223–231",
     year: 2025,
     tags: ["HRI", "VLM", "Trustworthy AI"],
     links: {
@@ -19,12 +19,15 @@ export const publications: Publication[] = [
     featured: true,
   },
   {
-    slug: "scout-plus-plus-dataset",
-    title: "SCOUT++: A Multimodal Benchmark for Instruction Grounding in HRI",
-    authors: ["E. Ogbadu"],
-    venue: "Preprint",
-    year: 2025,
-    tags: ["Dataset", "Multimodal", "Benchmark"],
-    // links: { pdf: "https://arxiv.org/abs/..." },
+    slug: "ask-to-act",
+    title:
+      "Ask-to-Act: Learning When Robots Should Clarify Ambiguous Grounded Instructions",
+    authors: ["Ekele Ogbadu"],
+    venue: "IEEE RO-MAN (accepted)",
+    year: 2026,
+    tags: ["HRI", "Grounded Language", "Ambiguity"],
+    abstract:
+      "When a natural-language instruction is ambiguous, a robot that acts confidently is more dangerous than one that asks. This work studies when a robot should request clarification rather than commit to an interpretation of a grounded instruction.",
+    featured: true,
   },
 ];
