@@ -2,6 +2,17 @@ import type { Project } from "@/types/content";
 
 export const projects: Project[] = [
   {
+    slug: "timesense",
+    title: "TimeSense",
+    summary:
+      "Mobile-first, context-aware personal time assistant. Learns your routines, commute, meals, sleep, and calendar to tell you what to do next — without making you maintain another productivity system.",
+    tags: ["Swift", "Kotlin", "FastAPI", "PostgreSQL", "LLM"],
+    repo: "https://github.com/eogbadu/TimeSense",
+    // TODO: add a screenshot at /public/projects/timesense.webp — this is the
+    // flagship project and currently the only card rendering without an image.
+    featured: true,
+  },
+  {
     slug: "resumetailor",
     title: "ResumeTailor",
     summary:
@@ -10,7 +21,9 @@ export const projects: Project[] = [
     // No links yet: the repo (eogbadu/job-matching-platform) is private, so a link
     // would 404 for visitors. Add `repo` when it goes public, and `url` when a live
     // demo exists. The card renders "Details coming soon" in the meantime.
-    image: "/projects/resumetailor_3.png",
+    image: "/projects/resumetailor_3.webp",
+    imageAlt:
+      "ResumeTailor logo — a gold document icon with a person and a star, on black",
     featured: true,
   },
   {
@@ -20,7 +33,9 @@ export const projects: Project[] = [
       "Toolkit for multimodal HRI experiments and dataset benchmarking of instruction grounding.",
     tags: ["Python", "PyTorch", "Vision-Language", "Evaluation"],
     repo: "https://github.com/eogbadu/SCOUT-plus-plus",
-    image: "/projects/scout.png",
+    image: "/projects/scout.webp",
+    imageAlt:
+      "SCOUT++ Tool Kit illustration — hand tools arranged in an open leather case",
     featured: true,
   },
   {
@@ -29,7 +44,8 @@ export const projects: Project[] = [
     summary:
       "Constraint-aware scheduler for Field Service Representatives across multiple systems.",
     tags: ["TypeScript", "Algorithms", "UX"],
-    image: "/projects/fsrplanner.png",
+    image: "/projects/fsrplanner.webp",
+    imageAlt: "FSR ToolPlanner logo — a gold calendar and wrench icon on dark green",
     featured: true,
   },
 ];

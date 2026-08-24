@@ -75,8 +75,25 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen font-sans bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        {/*
+          Skip link: the first thing a keyboard or screen-reader user reaches, so
+          they can jump past the nav. Visually hidden until focused.
+        */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100]
+                     focus:rounded-xl focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm
+                     focus:font-semibold focus:text-white focus:outline-none focus:ring-2
+                     focus:ring-slate-400 dark:focus:bg-slate-50 dark:focus:text-slate-900"
+        >
+          Skip to content
+        </a>
+
         <Navbar />
-        <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+        {/* scroll-mt offsets the sticky header when jumping to #main */}
+        <main id="main" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-8 scroll-mt-20">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

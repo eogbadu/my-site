@@ -21,8 +21,9 @@ export default function ProjectsPage() {
       </header>
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {projects.map((p) => (
-          <ProjectCard key={p.slug} project={p} />
+        {projects.map((p, i) => (
+          // Only the first card is above the fold, so only it preloads.
+          <ProjectCard key={p.slug} project={p} eager={i === 0} />
         ))}
       </ul>
     </section>

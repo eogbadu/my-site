@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { siteConfig } from "@/config/site";
+
 type TabId = "overview" | "work" | "skills";
 
 const TABS: { id: TabId; label: string }[] = [
@@ -64,9 +66,12 @@ export default function AboutPage() {
         <div className="mt-6 md:mt-[52px] flex-shrink-0 flex justify-center md:justify-end">
           <div className="relative h-[650px] w-[400px] max-w-full overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-lg">
             <Image
-              src="/avatar.png" // put your actual 650x500 image here
-              alt="Portrait"
+              src={siteConfig.avatar}
+              alt={siteConfig.name}
               fill
+              // Without `sizes`, `fill` makes the browser assume 100vw and fetch a
+              // far larger variant than this 400px-wide box needs.
+              sizes="(min-width: 768px) 400px, 100vw"
               priority
               className="object-cover"
             />

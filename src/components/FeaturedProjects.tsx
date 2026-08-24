@@ -20,6 +20,8 @@ export default function FeaturedProjects() {
       </header>
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* No `eager` here: this strip is below the fold, and preloading it would
+            compete with the hero avatar, which is the actual LCP element. */}
         {featured.map((p) => (
           <ProjectCard key={p.slug} project={p} />
         ))}

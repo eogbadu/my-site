@@ -3,9 +3,16 @@ import type { Project } from "@/types/content";
 
 interface Props {
   project: Project;
+  /**
+   * Preload this card's image. Set it only for the single largest image above
+   * the fold. It used to be derived from `featured`, but every project is
+   * featured, so three below-the-fold images were preloading and competing with
+   * the real LCP element for bandwidth.
+   */
+  eager?: boolean;
 }
 
-export default function ProjectCard({ project: p }: Props) {
+export default function ProjectCard({ project: p, eager = false }: Props) {
   return (
     <li className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 hover:shadow-sm transition">
       {/* Optional image */}
@@ -13,11 +20,11 @@ export default function ProjectCard({ project: p }: Props) {
         <div className="mb-3 relative w-full aspect-video overflow-hidden rounded-xl">
           <Image
             src={p.image}
-            alt={p.title}
+            alt={p.imageAlt ?? `${p.title} screenshot`}
             fill
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover"
-            priority={p.featured === true}
+            priority={eager}
           />
         </div>
       ) : null}

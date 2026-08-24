@@ -72,6 +72,9 @@ export default function HomePage() {
                 alt={siteConfig.name}
                 fill
                 sizes="(min-width: 768px) 18rem, 14rem"
+                // The hero portrait is the homepage LCP element, so this is the
+                // one image on the page that should preload.
+                priority
                 className="relative z-10 rounded-full object-cover ring-4 ring-white dark:ring-slate-900 shadow-2xl"
               />
             </div>

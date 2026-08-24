@@ -6,7 +6,8 @@ export interface Project {
   tags: string[]; // e.g., ["Next.js", "PostgreSQL"]
   url?: string; // external link (optional)
   repo?: string; // GitHub link (optional)
-  image?: string; // path under /public (optional), e.g., "/projects/resumetailor.png"
+  image?: string; // path under /public (optional), e.g., "/projects/resumetailor_3.webp"
+  imageAlt?: string; // describes the screenshot; falls back to the title if absent
   featured?: boolean; // highlight on homepage (optional)
 }
 

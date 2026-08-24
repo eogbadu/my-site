@@ -10,7 +10,7 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 1 | Contact form: fix crash + restore hardening | ✅ | `c20e98a` | Mail delivery unverifiable locally — see ERRORS E14 |
 | 2 | Config, styling, build hygiene | ✅ | `143d5fc` | Fixed E4–E9; lint now fully clean |
 | 3 | `siteConfig` + full SEO pass | ✅ | `8bf9ca4` | Placeholder URLs (H9) still pending — deferred to Phase 4 |
-| 4 | Accessibility + images | ⬜ | — | Needs H8 (image compression) |
+| 4 | Accessibility + images | ✅ | `a2d9b87` | Images compressed in-repo; H8 no longer needed |
 | 5 | Dark mode toggle | ⬜ | — | **Requires Phase 2 first** (unlayered `body{}` fix) |
 | 6 | De-client `/about` + `/projects/[slug]` | ⬜ | — | |
 | 7 | Database foundation | ⬜ | — | Needs H2, H3. **Branch + Preview** |
@@ -147,6 +147,27 @@ component.
 
 **Also fixed:** `ResumeActions.copyLink` used `window.location.origin`, which on the apex
 produces a URL that 307-redirects; it now shares the canonical origin.
+
+### 2026-08-25 — Phase 4 complete
+
+**Accessibility** — verified in the rendered HTML:
+- Skip link as the first focusable element, targeting `<main id="main" tabindex="-1">`
+  with `scroll-mt-20` to clear the sticky header
+- `<nav aria-label="Main">`; mobile toggle now uses lucide `Menu`/`X` (self-hiding from the
+  a11y tree) with `aria-expanded` + `aria-controls="mobile-menu"`, Escape to close, and
+  focus returned to the trigger
+- Descriptive `alt` everywhere; added `imageAlt` to the `Project` type
+
+**Images** — 10.0 MB → 0.67 MB (93%), `public/` 12 MB → 2.9 MB. See ERRORS E18.
+Did the compression in-repo with the `sharp` already present via Next, so **runbook H8 is
+no longer a user action**. Kept `resumetailor_1/_2` for the Phase 6 gallery.
+
+**`priority` fix** — was `priority={p.featured}`, and every project is featured, so
+below-the-fold cards preloaded and competed with the LCP. Now an explicit `eager` prop.
+Verified: exactly **1** preload tag on `/` (the hero avatar), **0** on `/projects`.
+
+**Also:** added TimeSense as the flagship project (first + featured), and deleted the five
+unreferenced `create-next-app` SVGs.
 
 ## Phase completion checklist
 

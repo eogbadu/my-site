@@ -381,6 +381,48 @@ layouts now route through it, so the image cannot be dropped by accident.
 
 ---
 
+### ✅ E18 — Project images were 93% larger than necessary, and the alt text I first wrote was wrong
+Two findings from Phase 4, one of them my own mistake.
+
+**Size.** The images were not oversized in *dimensions* (1024–1536 px) — they were badly
+encoded PNGs. Re-encoding to WebP q82 (with a modest resize) cut them dramatically:
+
+| File | Before | After | Saved |
+|---|---|---|---|
+| `scout` | 3.27 MB | 244 KB | 92.7% |
+| `fsrplanner` | 2.20 MB | 227 KB | 89.9% |
+| `resumetailor_3` | 1.34 MB | 35 KB | 97.4% |
+| `resumetailor_1` | 1.38 MB | 39 KB | 97.2% |
+| `resumetailor_2` | 1.05 MB | 30 KB | 97.3% |
+| `avatar` | 0.70 MB | 107 KB | 85.0% |
+| **total** | **10.0 MB** | **0.67 MB** | **93%** |
+
+`public/` went from 12 MB to 2.9 MB (the remainder is two PDFs). Visually inspected the
+results — no artifacts. Note this is a repo-size and transform-cost win, not a visitor
+bandwidth win: `next/image` was already transcoding on the fly.
+
+**Alt text.** I initially wrote plausible-sounding alt text from the filenames —
+e.g. "SCOUT++ toolkit visualizing a robot camera frame aligned with a natural-language
+instruction". **All three were wrong.** Actually viewing the images showed they are
+*logos and stock illustrations*, not screenshots:
+
+- `resumetailor_3` — the ResumeTailor **logo** (gold document icon on black)
+- `fsrplanner` — the **"FSR ToolPlanner"** logo (gold calendar + wrench on dark green)
+- `scout` — an illustration of a **physical tool kit** (knife, compass, pliers) captioned
+  "SCOUT++ TOOL KIT"
+
+Corrected to describe what is actually shown. **Lesson: never write alt text from a
+filename — open the image.** Invented alt text is worse than none, because a screen-reader
+user has no way to detect the lie.
+
+**Two things for the user, noted but not changed:**
+1. The FSR logo reads "FSR **ToolPlanner**" while `projects.ts` says "FSR **Release
+   Planner**" — one of the two is wrong.
+2. The SCOUT++ image depicts a literal toolbox, which misrepresents a multimodal HRI
+   benchmark. Cosmetic, but it undersells the work.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -403,3 +445,6 @@ layouts now route through it, so the image cannot be dropped by accident.
   nonexistent mailbox returns the same code.** Confirm the account exists before rotating
   its credentials (E14).
 - **Client components cannot export `metadata`.** Use a route `layout.tsx` for that segment.
+- **Never write alt text from a filename.** Open the image (E18).
+- **A huge PNG is usually badly encoded, not oversized.** Check dimensions before assuming
+  a resize is the fix (E18).

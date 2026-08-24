@@ -64,7 +64,7 @@ export const siteConfig = {
   ],
 
   resumePdf: "/resume.pdf",
-  avatar: "/avatar.png",
+  avatar: "/avatar.webp",
 
   nav: [
     { name: "Home", href: "/" },
