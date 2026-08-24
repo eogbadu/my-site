@@ -72,6 +72,14 @@ contact form is already silently broken. Worth checking the Vercel env vars (RUN
 
 **One bug introduced and caught during testing:** the honeypot's `.max(0)` — see E13.
 
+### 2026-08-24 — Out-of-band security upgrade
+
+Next.js **15.5.5 → 15.5.23** (`559f574`), closing 29 advisories including the critical
+React Flight RCE. Chose 15.5.23 over the 15.5.9 in Vercel's automated PR #1, which would
+have left ~20 advisories open. See ERRORS E16.
+
+⚠️ **Vercel PR #1 must be CLOSED, not merged** — merging it would downgrade next to 15.5.9.
+
 ## Phase completion checklist
 
 Before marking a phase ✅:

@@ -219,6 +219,43 @@ blocks the whole sequence.
 
 ---
 
+### ✅ E16 — Next.js 15.5.5 carried 29 security advisories, including a critical RCE
+Surfaced by a Vercel deployment-log warning and an automated Vercel PR (#1, draft).
+
+**The headline issue:** unauthenticated remote code execution via insecure
+deserialization in the React Flight protocol —
+[GHSA-9qr9-h5gf-34mp](https://github.com/vercel/next.js/security/advisories/GHSA-9qr9-h5gf-34mp)
+/ CVE-2025-55182 / CVE-2025-66478.
+
+**What `npm audit` actually showed:** 29 advisories against `next@15.5.5`, with
+`fixAvailable: { version: "15.5.23", isSemVerMajor: false }`.
+
+**Why we did NOT just merge Vercel's PR:** it bumps only to **15.5.9**, which closes the
+RCE but leaves roughly 20 advisories open — multiple middleware/proxy bypasses, RSC cache
+poisoning, SSRF via rewrites and Server Actions, CSP-nonce XSS, and several DoS vectors in
+the Image Optimization API. 15.5.23 is the same patch line and closes all of them.
+
+⚠️ **PR #1 must be closed, not merged.** Its branch predates this fix, so merging it later
+would *downgrade* next from 15.5.23 to 15.5.9.
+
+**Result after upgrading:** no Next-specific advisory remains. `next` is still listed by
+`npm audit`, but only transitively — `via: ["postcss", "sharp"]`, both bundled inside next.
+npm consequently suggests `16.3.2`, but that is **semver-major** and a separate migration;
+it is not required to close the RCE.
+
+**React was deliberately not bumped:** it isn't flagged, and Next vendors its own copy of
+the RSC runtime, which is what carried the vulnerability.
+
+**Relevance to the plan:** several of the patched advisories are *middleware/proxy bypasses*.
+That is direct evidence for the Phase 8 design decision that middleware is **not** the
+security boundary and `requireAdmin()` must be re-checked inside every Server Action
+(DECISIONS D4).
+
+**Verified:** `tsc --noEmit` clean, eslint unchanged, `next build` succeeds, and a
+production `next start` smoke test returned 200 on all 10 routes and 404 on an unknown path.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -231,3 +268,7 @@ blocks the whole sequence.
 - **A honeypot field must pass validation**, not fail it, or the bot learns to drop it (E13).
 - **`.env.local` is not a trustworthy mirror of production.** It held a placeholder host
   and stale credentials; don't infer production health from local behavior (E14).
+- **Automated security PRs may do the minimum.** Vercel's bot fixed one CVE; `npm audit`
+  found 28 more closed by the same patch line. Always check `fixAvailable` yourself (E16).
+- **`npm audit` flagging a package doesn't mean the package is at fault.** Check `via` —
+  `next` stayed flagged only because of bundled `postcss`/`sharp` (E16).
