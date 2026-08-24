@@ -30,7 +30,7 @@ export default function ResumeActions() {
       <a
         href={siteConfig.resumePdf}
         target="_blank"
-        className="rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-5 py-2.5 text-sm font-semibold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-slate-400"
+        className="rounded-2xl bg-ink text-paper px-5 py-2.5 text-sm font-semibold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-accent"
         aria-label="Download PDF resume"
       >
         Download PDF
@@ -39,7 +39,7 @@ export default function ResumeActions() {
       <button
         type="button"
         onClick={copyLink}
-        className="rounded-2xl ring-1 ring-slate-300 dark:ring-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+        className="rounded-2xl ring-1 ring-rule px-4 py-2 text-sm font-semibold hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
         aria-live="polite"
       >
         {copied === "ok"
@@ -52,7 +52,7 @@ export default function ResumeActions() {
       <button
         type="button"
         onClick={printPage}
-        className="rounded-2xl ring-1 ring-slate-300 dark:ring-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+        className="rounded-2xl ring-1 ring-rule px-4 py-2 text-sm font-semibold hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
       >
         Print this page
       </button>

@@ -15,7 +15,7 @@ const ICONS: Record<SocialIcon, LucideIcon> = {
 
 export default function SocialLinks() {
   return (
-    <div className="flex items-center gap-5 mt-6">
+    <div className="flex items-center gap-4 pt-2">
       {siteConfig.social.map(({ name, href, icon, color }) => {
         const Icon = ICONS[icon];
         const isMailto = href.startsWith("mailto:");
@@ -29,11 +29,10 @@ export default function SocialLinks() {
             title={name}
             // Exposed as a CSS var so the hover color can come from config.
             style={{ "--brand": color } as React.CSSProperties}
-            className="group text-slate-600 dark:text-slate-300 transition-transform hover:scale-110
-                       focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-md
-                       hover:text-[var(--brand)]"
+            className="text-ink-faint hover:text-[var(--brand)] transition-colors
+                       focus:outline-none focus:ring-2 focus:ring-accent rounded-sm p-1 -m-1"
           >
-            <Icon className="w-8 h-8 transition-colors duration-200" aria-hidden="true" />
+            <Icon className="w-[18px] h-[18px]" aria-hidden="true" strokeWidth={1.75} />
           </a>
         );
       })}

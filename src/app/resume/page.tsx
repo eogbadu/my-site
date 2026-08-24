@@ -16,10 +16,10 @@ export default function ResumePage() {
       <header className="space-y-2 print:space-y-1">
         <h1 className="text-3xl font-bold print:text-2xl">{resume.name}</h1>
         {resume.tagline && (
-          <p className="text-slate-600 dark:text-slate-300">{resume.tagline}</p>
+          <p className="text-ink-muted">{resume.tagline}</p>
         )}
         {resume.summary && (
-          <p className="text-slate-700 dark:text-slate-200 max-w-prose text-justify hyphens-auto">
+          <p className="text-ink-muted max-w-prose text-justify hyphens-auto">
             {resume.summary}
           </p>
         )}
@@ -40,13 +40,13 @@ export default function ResumePage() {
               {section.items.map((item, idx) => (
                 <li
                   key={item.title + idx}
-                  className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 print:border-0 print:p-0"
+                  className="rounded-2xl border border-rule p-4 print:border-0 print:p-0"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                     <div>
                       <p className="font-semibold">{item.title}</p>
                       {(item.org || item.location) && (
-                        <p className="text-sm text-slate-600 dark:text-slate-300">
+                        <p className="text-sm text-ink-muted">
                           {[item.org, item.location]
                             .filter(Boolean)
                             .join(" — ")}
@@ -54,14 +54,14 @@ export default function ResumePage() {
                       )}
                     </div>
                     {item.period && (
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-ink-faint">
                         {item.period}
                       </span>
                     )}
                   </div>
 
                   {item.bullets && item.bullets.length > 0 && (
-                    <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-slate-700 dark:text-slate-200 print:mt-2">
+                    <ul className="mt-3 list-disc pl-5 space-y-1 text-sm text-ink-muted print:mt-2">
                       {item.bullets.map((b, i) => (
                         <li key={i}>{b}</li>
                       ))}

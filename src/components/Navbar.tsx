@@ -26,25 +26,25 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-paper/85 border-b border-rule">
       <nav
         aria-label="Main"
-        className="mx-auto max-w-6xl px-4 h-14 flex items-center justify-between"
+        className="mx-auto max-w-5xl px-5 sm:px-8 h-16 flex items-center justify-between"
       >
         <Link
           href="/"
-          className="font-semibold tracking-tight rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="font-display text-xl tracking-tight rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
         >
           {siteConfig.shortName}
         </Link>
 
         {/* Desktop nav */}
-        <ul className="hidden md:flex items-center gap-6 text-sm">
+        <ul className="hidden md:flex items-center gap-7 text-[0.9rem]">
           {links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="hover:text-slate-500 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+                className="text-ink-muted hover:text-ink link-underline rounded-sm focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 {l.name}
               </Link>
@@ -56,7 +56,7 @@ export default function Navbar() {
         <button
           ref={toggleRef}
           type="button"
-          className="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="md:hidden p-2 rounded-md text-ink-muted hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -71,13 +71,13 @@ export default function Navbar() {
       {open && (
         <ul
           id="mobile-menu"
-          className="md:hidden px-4 pb-4 space-y-2 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800"
+          className="md:hidden px-5 pb-4 space-y-1 bg-paper border-t border-rule"
         >
           {links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="block py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+                className="block py-2.5 text-ink-muted hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent rounded-sm"
                 onClick={() => setOpen(false)}
               >
                 {l.name}

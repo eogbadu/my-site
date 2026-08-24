@@ -66,7 +66,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       <nav aria-label="Breadcrumb" className="text-sm">
         <Link
           href="/projects"
-          className="text-slate-600 dark:text-slate-300 hover:underline underline-offset-4 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="text-ink-muted hover:underline underline-offset-4 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
         >
           ← All projects
         </Link>
@@ -76,10 +76,10 @@ export default async function ProjectDetailPage({ params }: Props) {
         <h1 className="text-4xl font-bold tracking-tight">{project.title}</h1>
 
         {meta.length > 0 && (
-          <p className="text-sm text-slate-500">{meta.join(" · ")}</p>
+          <p className="text-sm text-ink-faint">{meta.join(" · ")}</p>
         )}
 
-        <p className="text-lg text-slate-700 dark:text-slate-200 max-w-prose">
+        <p className="text-lg text-ink-muted max-w-prose">
           {project.summary}
         </p>
 
@@ -87,7 +87,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           {project.tags.map((t) => (
             <span
               key={t}
-              className="text-xs px-2 py-1 rounded-full ring-1 ring-slate-300 dark:ring-slate-700"
+              className="text-xs px-2 py-1 rounded-full ring-1 ring-rule"
             >
               {t}
             </span>
@@ -104,7 +104,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                   href={l.href}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noreferrer" : undefined}
-                  className="rounded-2xl px-4 py-2 text-sm font-semibold ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                  className="rounded-2xl px-4 py-2 text-sm font-semibold ring-1 ring-rule hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
                 >
                   {l.label}
                   {external ? " ↗" : ""}
@@ -116,7 +116,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       </header>
 
       {project.image && (
-        <div className="relative w-full aspect-video overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+        <div className="relative w-full aspect-video overflow-hidden rounded-2xl border border-rule">
           <Image
             src={project.image}
             alt={project.imageAlt ?? `${project.title} screenshot`}
@@ -141,7 +141,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             preload="none"
             playsInline
             poster={project.videoPoster}
-            className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-black"
+            className="w-full rounded-2xl border border-rule bg-black"
           >
             <source src={project.video} type="video/mp4" />
             Your browser doesn&rsquo;t support embedded video.{" "}
@@ -156,7 +156,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       {project.highlights && project.highlights.length > 0 && (
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold">Highlights</h2>
-          <ul className="list-disc pl-6 space-y-2 text-slate-700 dark:text-slate-200 max-w-prose">
+          <ul className="list-disc pl-6 space-y-2 text-ink-muted max-w-prose">
             {project.highlights.map((h) => (
               <li key={h}>{h}</li>
             ))}
@@ -167,7 +167,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       {project.body && (
         <section className="space-y-3">
           <h2 className="text-2xl font-semibold">Background</h2>
-          <div className="space-y-4 text-slate-700 dark:text-slate-200 max-w-prose leading-7">
+          <div className="space-y-4 text-ink-muted max-w-prose leading-7">
             {project.body.split("\n\n").map((para) => (
               <p key={para.slice(0, 40)}>{para}</p>
             ))}
@@ -182,7 +182,7 @@ export default async function ProjectDetailPage({ params }: Props) {
             {project.stack.map((t) => (
               <li
                 key={t}
-                className="text-sm px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800"
+                className="text-sm px-3 py-1.5 rounded-xl border border-rule"
               >
                 {t}
               </li>
@@ -197,7 +197,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           <ul className="grid gap-4 sm:grid-cols-2">
             {project.gallery.map((g) => (
               <li key={g.src} className="space-y-2">
-                <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
+                <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-rule">
                   <Image
                     src={g.src}
                     alt={g.alt}
@@ -207,7 +207,7 @@ export default async function ProjectDetailPage({ params }: Props) {
                   />
                 </div>
                 {g.caption && (
-                  <p className="text-xs text-slate-500">{g.caption}</p>
+                  <p className="text-xs text-ink-faint">{g.caption}</p>
                 )}
               </li>
             ))}
@@ -215,10 +215,10 @@ export default async function ProjectDetailPage({ params }: Props) {
         </section>
       )}
 
-      <footer className="pt-4 border-t border-slate-200 dark:border-slate-800">
+      <footer className="pt-4 border-t border-rule">
         <Link
           href="/projects"
-          className="text-sm text-slate-600 dark:text-slate-300 hover:underline underline-offset-4 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="text-sm text-ink-muted hover:underline underline-offset-4 rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
         >
           ← All projects
         </Link>

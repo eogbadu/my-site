@@ -457,6 +457,29 @@ along. When a Next config export seems to have no effect, rebuild clean before d
 
 ---
 
+### ✅ E20 — A zombie `next-server` held port 3000 and served a stale build for ~40 minutes
+Every `npm run start` after the first was silently failing with `EADDRINUSE`, because
+`pkill -f "next start"` does not match the actual process, which is named `next-server`.
+
+The symptom was baffling rather than obvious: the served HTML referenced
+`/_next/static/chunks/d9245e1c….css`, but `rm -rf .next` plus a rebuild had produced
+`a25ea757….css`. So the stylesheet 404'd — reported as **HTTP 400** — and pages rendered as
+unstyled HTML. It looked like a CSS build failure, then like a headless-Chrome quirk, and
+was neither.
+
+**Diagnosis:** `lsof -ti:3000` showed `78878 next-server (v15.5.23)` still listening, and
+the start log said `⨯ Failed to start server / EADDRINUSE`. That log line was the whole
+answer and had been sitting there unread.
+
+**Fix:** `lsof -ti:3000 | xargs kill -9` before starting. **Always kill by port, never by
+process-name pattern.**
+
+**Lesson, and this is the second time (see E19):** when output does not match the code, stop
+theorising and verify what is actually running — check the port, check the server log, check
+the asset hashes. Both incidents cost real time to a stale process.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -486,5 +509,10 @@ along. When a Next config export seems to have no effect, rebuild clean before d
   `dynamicParams = false` (E19).
 - **`next start` happily serves a stale `.next`.** Rebuild clean before concluding a change
   had no effect (E19).
+- **Kill dev servers by port, not by name.** `pkill -f "next start"` misses `next-server`;
+  use `lsof -ti:3000 | xargs kill -9`. A zombie server silently wins the port and serves an
+  old build while every restart fails with EADDRINUSE (E20).
+- **Read the server log before theorising.** E20 announced itself in one line that went
+  unread for half an hour.
 - **Internal `<a href="/...">` forces a full page reload.** Use `next/link`; eslint's
   `@next/next/no-html-link-for-pages` catches it.

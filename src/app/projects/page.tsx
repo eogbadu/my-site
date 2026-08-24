@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
 import { projects } from "@/data/projects";
 import ProjectCard from "@/components/ProjectCard";
+import SectionHeader from "@/components/SectionHeader";
 
 export const metadata: Metadata = buildMetadata({
   title: "Projects",
@@ -12,18 +13,18 @@ export const metadata: Metadata = buildMetadata({
 
 export default function ProjectsPage() {
   return (
-    <section className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold">Projects</h1>
-        <p className="text-slate-600 dark:text-slate-300 max-w-prose">
-          A few things I’ve built or worked on recently.
-        </p>
-      </header>
+    <section>
+      <SectionHeader
+        as="h1"
+        eyebrow="Portfolio"
+        title="Projects"
+        description="Products, research tooling, and internal systems — a few things I have built or worked on recently."
+      />
 
-      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((p, i) => (
           // Only the first card is above the fold, so only it preloads.
-          <ProjectCard key={p.slug} project={p} eager={i === 0} />
+          <ProjectCard key={p.slug} project={p} eager={i === 0} index={i} />
         ))}
       </ul>
     </section>

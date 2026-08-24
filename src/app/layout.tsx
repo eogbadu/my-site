@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -20,6 +20,19 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+/**
+ * Display face for headings. The typographic contrast between a high-contrast
+ * serif and a geometric sans is what stops the site reading as a default
+ * template — and a serif carries the scholarly register the research audience
+ * responds to, which a single sans cannot.
+ */
+const displaySerif = Instrument_Serif({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -73,8 +86,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen font-sans bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable}`}>
+      <body className="min-h-screen font-sans antialiased bg-paper text-ink">
         {/*
           Skip link: the first thing a keyboard or screen-reader user reaches, so
           they can jump past the nav. Visually hidden until focused.
@@ -82,16 +95,16 @@ export default function RootLayout({
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100]
-                     focus:rounded-xl focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm
-                     focus:font-semibold focus:text-white focus:outline-none focus:ring-2
-                     focus:ring-slate-400 dark:focus:bg-slate-50 dark:focus:text-slate-900"
+                     focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-sm
+                     focus:font-semibold focus:text-paper focus:outline-none focus:ring-2
+                     focus:ring-accent"
         >
           Skip to content
         </a>
 
         <Navbar />
         {/* scroll-mt offsets the sticky header when jumping to #main */}
-        <main id="main" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-8 scroll-mt-20">
+        <main id="main" tabIndex={-1} className="mx-auto max-w-5xl px-5 sm:px-8 py-12 sm:py-16 scroll-mt-24">
           {children}
         </main>
         <Footer />

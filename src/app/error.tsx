@@ -24,12 +24,12 @@ export default function Error({
     <section className="py-16 text-center space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">Something went wrong</h1>
-        <p className="text-slate-600 dark:text-slate-300 max-w-prose mx-auto">
+        <p className="text-ink-muted max-w-prose mx-auto">
           This one is on me, not you. Try again — and if it keeps happening, please
           get in touch.
         </p>
         {error.digest && (
-          <p className="text-xs text-slate-500">Reference: {error.digest}</p>
+          <p className="text-xs text-ink-faint">Reference: {error.digest}</p>
         )}
       </div>
 
@@ -37,19 +37,19 @@ export default function Error({
         <button
           type="button"
           onClick={reset}
-          className="rounded-2xl bg-slate-900 text-white dark:bg-slate-50 dark:text-slate-900 px-5 py-2.5 text-sm font-semibold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="rounded-2xl bg-ink text-paper px-5 py-2.5 text-sm font-semibold hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-accent"
         >
           Try again
         </button>
         <Link
           href="/"
-          className="rounded-2xl px-5 py-2.5 text-sm font-semibold ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="rounded-2xl px-5 py-2.5 text-sm font-semibold ring-1 ring-rule hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
         >
           Go home
         </Link>
         <Link
           href="/contact"
-          className="rounded-2xl px-5 py-2.5 text-sm font-semibold ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="rounded-2xl px-5 py-2.5 text-sm font-semibold ring-1 ring-rule hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
         >
           Report it
         </Link>

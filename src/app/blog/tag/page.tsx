@@ -29,14 +29,14 @@ export default function TagIndexPage() {
     <section className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">Tags</h1>
-        <p className="text-slate-600 dark:text-slate-300 max-w-prose">
+        <p className="text-ink-muted max-w-prose">
           Browse posts by topic. Tags are a light-weight way to organize notes
           across projects, research, and progress logs.
         </p>
       </header>
 
       {entries.length === 0 ? (
-        <p className="text-sm text-slate-600 dark:text-slate-300">
+        <p className="text-sm text-ink-muted">
           No tags yet — once you add tags to posts in{" "}
           <code>src/data/posts.ts</code>, they’ll show up here.
         </p>
@@ -46,10 +46,10 @@ export default function TagIndexPage() {
             <li key={slug}>
               <Link
                 href={`/blog/tag/${slug}`}
-                className="inline-flex items-center rounded-full border border-slate-200 dark:border-slate-800 px-3 py-1 hover:bg-slate-50 dark:hover:bg-slate-900"
+                className="inline-flex items-center rounded-full border border-rule px-3 py-1 hover:bg-surface"
               >
                 <span>{slugToLabel(slug)}</span>
-                <span className="ml-2 text-xs text-slate-500">
+                <span className="ml-2 text-xs text-ink-faint">
                   {count} post{count === 1 ? "" : "s"}
                 </span>
               </Link>

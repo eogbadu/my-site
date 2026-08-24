@@ -19,7 +19,7 @@ export default function BlogIndexPage() {
     <section className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">Blog</h1>
-        <p className="text-slate-600 dark:text-slate-300 max-w-prose">
+        <p className="text-ink-muted max-w-prose">
           Essays, experiments, and build logs.
         </p>
       </header>
@@ -28,7 +28,7 @@ export default function BlogIndexPage() {
         {sorted.map((p) => (
           <li
             key={p.slug}
-            className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4"
+            className="rounded-2xl border border-rule p-4"
           >
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
               <Link
@@ -37,10 +37,10 @@ export default function BlogIndexPage() {
               >
                 {p.title}
               </Link>
-              <span className="text-xs text-slate-500">{p.date}</span>
+              <span className="text-xs text-ink-faint">{p.date}</span>
             </div>
             {p.excerpt && (
-              <p className="mt-2 text-sm text-slate-700 dark:text-slate-200 line-clamp-3">
+              <p className="mt-2 text-sm text-ink-muted line-clamp-3">
                 {p.excerpt}
               </p>
             )}
@@ -52,7 +52,7 @@ export default function BlogIndexPage() {
                     <Link
                       key={t}
                       href={`/blog/tag/${slug}`}
-                      className="text-xs px-2 py-1 rounded-full ring-1 ring-slate-300 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                      className="text-xs px-2 py-1 rounded-full ring-1 ring-rule hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
                     >
                       {t}
                     </Link>

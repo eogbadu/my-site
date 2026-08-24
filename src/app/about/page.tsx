@@ -100,7 +100,7 @@ export default function AboutPage() {
         <div className="flex-1 space-y-4">
           <h1 className="text-3xl font-bold tracking-tight">About Me</h1>
 
-          <p className="text-slate-600 dark:text-slate-300">
+          <p className="text-ink-muted">
             I&rsquo;m an AI/ML engineer, applied researcher, and PhD candidate at the
             University of Maryland, Baltimore County, where my work focuses on
             multimodal learning and trustworthy human-robot interaction. My research
@@ -109,7 +109,7 @@ export default function AboutPage() {
             understand what humans mean, not just what they say.
           </p>
 
-          <p className="text-slate-600 dark:text-slate-300">
+          <p className="text-ink-muted">
             I currently serve as a <strong>Lead AI/ML Engineer</strong> at Booz Allen
             Hamilton, where I lead AI/ML training, tool development, and platform
             enablement, and design LLM-enabled and RAG-style workflows for tagging,
@@ -120,14 +120,14 @@ export default function AboutPage() {
             days to zero.
           </p>
 
-          <p className="text-slate-600 dark:text-slate-300">
+          <p className="text-ink-muted">
             Before graduate school, I built and shipped several real-world systems across
             mobile development, web engineering, and data-driven products. I&rsquo;ve
             always enjoyed projects where clean engineering, thoughtful design, and
             tangible impact come together.
           </p>
 
-          <p className="text-slate-600 dark:text-slate-300">
+          <p className="text-ink-muted">
             Today, my focus is split across three areas: developing data-efficient
             multimodal models for robotics and autonomous systems; building AI-driven
             productivity tools, including TimeSense; and designing reliable ML pipelines
@@ -138,7 +138,7 @@ export default function AboutPage() {
         </div>
 
         <div className="mt-6 md:mt-[52px] flex-shrink-0 flex justify-center md:justify-end">
-          <div className="relative h-[650px] w-[400px] max-w-full overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-lg">
+          <div className="relative h-[650px] w-[400px] max-w-full overflow-hidden rounded-3xl border border-rule bg-surface shadow-lg">
             <Image
               src={siteConfig.avatar}
               alt={siteConfig.name}
@@ -160,7 +160,7 @@ export default function AboutPage() {
           <Link
             key={l.href}
             href={l.href}
-            className="inline-flex items-center rounded-2xl border border-slate-200 dark:border-slate-800 px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400"
+            className="inline-flex items-center rounded-2xl border border-rule px-3 py-1.5 hover:bg-surface focus:outline-none focus:ring-2 focus:ring-accent"
           >
             {l.label}
           </Link>

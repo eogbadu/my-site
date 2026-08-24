@@ -9,8 +9,13 @@ import { siteConfig } from "@/config/site";
  */
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800 mt-10 py-6 text-center text-sm text-slate-500">
-      © {siteConfig.copyrightStartYear}–present {siteConfig.name}. All rights reserved.
+    <footer className="border-t border-rule mt-20">
+      <div className="mx-auto max-w-5xl px-5 sm:px-8 py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <p className="text-sm text-ink-faint">
+          © {siteConfig.copyrightStartYear}–present {siteConfig.name}
+        </p>
+        <p className="eyebrow">{siteConfig.author.jobTitle} · Researcher</p>
+      </div>
     </footer>
   );
 }

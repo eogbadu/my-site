@@ -1,31 +1,25 @@
-import Link from "next/link";
-
 import ProjectCard from "@/components/ProjectCard";
+import SectionHeader from "@/components/SectionHeader";
 import { projects } from "@/data/projects";
 
 export default function FeaturedProjects() {
   const featured = projects.filter((p) => p.featured);
-
   if (featured.length === 0) return null;
 
   return (
-    <section className="space-y-4">
-      <header className="space-y-1">
-        <h2 className="text-2xl font-semibold">Featured Projects</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-300">
-          A snapshot of recent work. See more on the{" "}
-          <Link className="underline underline-offset-4" href="/projects">
-            Projects
-          </Link>{" "}
-          page.
-        </p>
-      </header>
+    <section>
+      <SectionHeader
+        eyebrow="Selected work"
+        title="Projects"
+        description="Things I have designed, built, and shipped."
+        action={{ href: "/projects", label: "All projects" }}
+      />
 
-      <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {/* No `eager` here: this strip is below the fold, and preloading it would
-            compete with the hero avatar, which is the actual LCP element. */}
-        {featured.map((p) => (
-          <ProjectCard key={p.slug} project={p} />
+      {/* No `eager` here: this strip sits below the fold, and preloading it would
+          compete with the hero portrait, which is the actual LCP element. */}
+      <ul className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {featured.map((p, i) => (
+          <ProjectCard key={p.slug} project={p} index={i} />
         ))}
       </ul>
     </section>

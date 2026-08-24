@@ -184,3 +184,36 @@ to survive ad blockers.
 
 **Both metrics are worth having:** Vercel tells you traffic shape; the DB `view_count` is
 first-party and immune to ad blockers, so it's the number worth displaying.
+
+---
+
+## D11 — Visual direction: editorial, not product or terminal
+
+**Brief:** the site serves two audiences — recruiters, and academic peers at conferences.
+That constraint decided the direction.
+
+Rejected **bold product** (large type, saturated gradients, motion): memorable, but it
+undersells a PhD and reads as marketing to a conference audience.
+Rejected **technical/terminal** (mono everything, dark-first, grid lines): distinctive, but
+reads junior to recruiters and cold to academics.
+
+**Chosen: editorial.** A high-contrast display serif (Instrument Serif) against a geometric
+sans (Geist), warm paper ground, hairline rules, mono eyebrow labels, and numbered indices.
+Typographic contrast between serif and sans is the single biggest reason the site no longer
+reads as a default template — one sans everywhere is the tell.
+
+The serif does specific work: it carries a publication register that a conference audience
+recognises immediately, while the project cards, screenshots, and demo video carry the
+industry story. Both audiences get served without the design shouting at either.
+
+**Token system** in `globals.css`: values on `:root`, mapped through `@theme inline` so
+Tailwind generates `bg-paper`, `text-ink-muted`, `border-rule`. Dark mode redefines the same
+custom properties inside the media query — the utilities need no `dark:` variants at all,
+which is also why the Phase 5 toggle will be a small change.
+
+Palette is warm paper `#fbfaf8` / ink `#17171a` rather than pure white on slate, because
+pure white plus default slate is precisely what every Tailwind starter looks like.
+
+**Favicon:** serif "EO" on ink, matching the palette. Ships as `favicon.ico` (an ICO
+container wrapping a 256px PNG, assembled by hand since sharp cannot write ICO), plus
+`icon.png` and an unrounded `apple-icon.png` for iOS to mask itself.

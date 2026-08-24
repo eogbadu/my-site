@@ -24,7 +24,7 @@ export const mdxComponents: MDXComponents = {
     <h3 className="text-xl font-semibold mt-6 mb-2" {...props} />
   ),
   p: (props: ComponentPropsWithoutRef<"p">) => (
-    <p className="leading-7 my-4 text-slate-700 dark:text-slate-200" {...props} />
+    <p className="leading-7 my-4 text-ink-muted" {...props} />
   ),
   ul: (props: ComponentPropsWithoutRef<"ul">) => (
     <ul className="list-disc pl-6 my-4 space-y-1" {...props} />
@@ -34,22 +34,22 @@ export const mdxComponents: MDXComponents = {
   ),
   blockquote: (props: ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote
-      className="border-l-4 border-slate-300 dark:border-slate-700 pl-4 italic my-4 text-slate-600 dark:text-slate-300"
+      className="border-l-4 border-rule pl-4 italic my-4 text-ink-muted"
       {...props}
     />
   ),
   hr: (props: ComponentPropsWithoutRef<"hr">) => (
-    <hr className="my-8 border-slate-200 dark:border-slate-800" {...props} />
+    <hr className="my-8 border-rule" {...props} />
   ),
   code: (props: ComponentPropsWithoutRef<"code">) => (
     <code
-      className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-sm"
+      className="rounded bg-surface px-1.5 py-0.5 text-sm"
       {...props}
     />
   ),
   pre: (props: ComponentPropsWithoutRef<"pre">) => (
     <pre
-      className="rounded-xl bg-slate-950 text-slate-100 p-4 overflow-x-auto my-4"
+      className="rounded-lg bg-[#16161a] text-[#e9e9ea] p-4 overflow-x-auto my-4 text-sm"
       {...props}
     />
   ),
@@ -73,11 +73,11 @@ export const mdxComponents: MDXComponents = {
   ),
   th: (props: ComponentPropsWithoutRef<"th">) => (
     <th
-      className="border border-slate-300 dark:border-slate-700 px-3 py-2 text-left font-semibold"
+      className="border border-rule px-3 py-2 text-left font-semibold"
       {...props}
     />
   ),
   td: (props: ComponentPropsWithoutRef<"td">) => (
-    <td className="border border-slate-300 dark:border-slate-700 px-3 py-2" {...props} />
+    <td className="border border-rule px-3 py-2" {...props} />
   ),
 };

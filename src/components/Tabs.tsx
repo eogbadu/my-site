@@ -56,7 +56,7 @@ export default function Tabs({
         role="tablist"
         aria-label={label}
         onKeyDown={onKeyDown}
-        className="inline-flex rounded-full border border-slate-200 dark:border-slate-800 p-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur"
+        className="inline-flex rounded-full border border-rule p-1 bg-surface backdrop-blur"
       >
         {tabs.map((t) => {
           const selected = t.id === active;
@@ -75,10 +75,10 @@ export default function Tabs({
               // moves past the whole tablist rather than through every tab.
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(t.id)}
-              className={`px-4 py-1.5 text-sm font-medium rounded-full transition focus:outline-none focus:ring-2 focus:ring-slate-400 ${
+              className={`px-4 py-1.5 text-sm font-medium rounded-full transition focus:outline-none focus:ring-2 focus:ring-accent ${
                 selected
-                  ? "bg-slate-900 text-white dark:bg-slate-50 dark:text-slate-900"
-                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                  ? "bg-ink text-paper"
+                  : "text-ink-muted hover:bg-surface"
               }`}
             >
               {t.label}
@@ -95,7 +95,7 @@ export default function Tabs({
           aria-labelledby={tabId(t.id)}
           hidden={t.id !== active}
           tabIndex={0}
-          className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 p-6 space-y-4 text-sm leading-relaxed text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          className="rounded-3xl border border-rule bg-surface p-6 space-y-4 text-sm leading-relaxed text-ink-muted focus:outline-none focus:ring-2 focus:ring-accent"
         >
           {t.panel}
         </div>
