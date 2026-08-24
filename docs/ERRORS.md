@@ -206,6 +206,24 @@ Vercel dashboard:
 **Diagnostic note:** the failure is *graceful* — generic message to the visitor, real error
 server-side, no PII logged. So the error handling is correct; only the credentials are wrong.
 
+**NARROWED TO AUTHENTICATION (2026-08-24).** The user confirmed Vercel has
+`SMTP_HOST=smtp.ionos.com`, so the host was only wrong locally (now fixed). Remaining
+evidence:
+- Server is healthy — raw probe returned `220 perfora.net (mreueus003) Nemesis ESMTP
+  Service ready` and `250 STARTTLS` on port 587. Not network, not TLS, not the port.
+- With correct host + user `contact@ekeleogbadu.io`:
+  **`535 Authentication credentials invalid`**.
+
+So: wrong password, SMTP access disabled on the mailbox, or an app-specific password is
+required. Stopped after three auth attempts to avoid triggering a block.
+
+**Tooling added:** `scripts/check-smtp.mjs` verifies credentials in seconds without a
+deploy, and maps `err.code` to a specific hint (EAUTH/EDNS/ETIMEDOUT/ECONNECTION).
+
+**Plausible contributing factor:** until Phase 1 the endpoint had no rate limiting (E2), so
+bot submissions may have been driving continuous failed SMTP logins — which is exactly what
+gets a mailbox blocked. The rate limiter now caps that at 5 per 10 minutes per client.
+
 **Note:** the failure path itself behaved correctly — graceful 500, generic message to
 the client, real error logged server-side, and **no submitter email address in the log**
 (confirming the E12 fix).

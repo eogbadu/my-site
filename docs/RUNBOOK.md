@@ -22,10 +22,40 @@ Setup, environment, deploy procedures, and the action items only a human can do.
 | H10 | Confirm nothing uses the IONOS MariaDB, then drop the WordPress tables | Any time — *not part of this project* | ⬜ |
 | H11 | Add `www.ekeleogbadu.io` to Google Search Console, submit `/sitemap.xml` | After Phase 3 | ⬜ |
 
-### H1 — Rotate SMTP password
-Hygiene, **not incident response**: `git log --all -S 'SMTP_PASS='` found nothing and no
-`.env*` file appears anywhere in git history. Nothing leaked. But the secret has sat in a
-plaintext file on disk for months, and the endpoint was unthrottled — cheap insurance.
+### H1 — Rotate SMTP password ⚠️ NOW URGENT
+**This is no longer hygiene — it is a live outage.** The contact form returns 500 on every
+valid submission in production, so visitor messages are being silently discarded.
+
+Diagnosis (2026-08-24), narrowed to authentication:
+- `SMTP_HOST` is correct in Vercel (`smtp.ionos.com`), and was a placeholder
+  (`smtp.example.com`) in `.env.local` — now corrected locally.
+- The server is reachable and healthy: banner `220 perfora.net ... Nemesis ESMTP Service
+  ready`, `250 STARTTLS` offered on port 587. Not a network or TLS problem.
+- With the correct host and user `contact@ekeleogbadu.io`, auth fails:
+  **`535 Authentication credentials invalid`**.
+
+So the password is wrong (or SMTP access is off for that mailbox, or it needs an
+app-specific password).
+
+**Fix:**
+1. IONOS control panel → Email → the `contact@ekeleogbadu.io` mailbox → reset the password.
+2. While there, confirm SMTP/IMAP access is **enabled** for the mailbox, and check whether
+   an app-specific password is required.
+3. Update `SMTP_PASS` in **Vercel** (all environments) *and* `.env.local`.
+4. Verify without deploying: `node --env-file=.env.local scripts/check-smtp.mjs`
+5. Once it passes: `node --env-file=.env.local scripts/check-smtp.mjs --send`
+6. Redeploy so Vercel picks up the new value, then submit the live form once.
+
+⚠️ **Repeated failed logins can get an IONOS mailbox temporarily blocked.** Until today the
+endpoint had no rate limiting (ERRORS E2), so bot traffic may have been driving failed auth
+attempts continuously. If a fresh password still returns 535, the account may be blocked —
+contact IONOS support.
+
+Nothing leaked, for the record: `git log --all -S 'SMTP_PASS='` found nothing and no `.env*`
+file appears anywhere in git history.
+
+**Local backup:** `.env.local.bak` holds the pre-edit version (gitignored). Delete it once
+the new password is in place.
 
 ### H3 — Pulling env vars
 `vercel env pull` **overwrites** `.env.local`. That file already holds the SMTP vars, so
@@ -117,6 +147,10 @@ npm run dev                 # localhost:3000
 npm run build               # production build
 npx tsc --noEmit            # type check
 npx eslint .                # lint
+
+# Diagnose SMTP without a deploy cycle:
+node --env-file=.env.local scripts/check-smtp.mjs           # verify login only
+node --env-file=.env.local scripts/check-smtp.mjs --send    # also send a test email
 
 # From Phase 7:
 npm run db:generate         # SQL migration from schema changes — commit and READ it
