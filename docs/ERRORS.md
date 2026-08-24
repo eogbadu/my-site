@@ -167,7 +167,7 @@ the honeypot must survive validation to be handled deliberately.
 
 ---
 
-### 🔴 E14 — Local `.env.local` SMTP config is non-functional
+### 🔴 E14 — SMTP is broken in BOTH local and production — the contact form delivers nothing
 Two independent problems, both confirmed by live testing:
 
 1. `SMTP_HOST=smtp.example.com` — a placeholder. The code's `smtp.ionos.com` fallback
@@ -180,11 +180,31 @@ contact endpoint was verified; delivery is blocked by environment, not by code.
 
 **Stopped after one auth attempt** — repeated 535s risk a provider-side lockout.
 
-**Open questions for the user (see RUNBOOK H1):**
-- Are the **production** (Vercel) SMTP vars correct? If `SMTP_PASS` is stale there too,
-  **the live contact form is silently broken** and every submission returns a 500.
-- Rotating the password (H1) and updating both Vercel and `.env.local` resolves this
-  either way.
+**CONFIRMED IN PRODUCTION (2026-08-24, post-deploy).** One valid submission to
+`https://www.ekeleogbadu.io/api/contact` returned:
+```
+{"ok":false,"formError":"Server error. Please try again later."}   [500]
+```
+A 500 here means `sendMail()` threw inside the try/catch — the same class of failure seen
+locally (`EDNS` for a bad host, `EAUTH` for bad credentials).
+
+**Impact: the contact form has been silently discarding every legitimate message.** The
+visitor sees a generic error; nothing reaches the inbox. This predates and is entirely
+independent of the Phase 1 changes — the old code had the same env handling, so any message
+sent through the live form has been lost for as long as the credentials have been wrong.
+
+**This is now the highest-priority open item.** It needs the user, since it requires the
+Vercel dashboard:
+1. Vercel → project → Settings → Environment Variables. Check `SMTP_HOST` — if it reads
+   `smtp.example.com` (as `.env.local` does), that alone is the bug; it should be
+   `smtp.ionos.com`.
+2. Check the runtime logs for `[contact] error` to see whether it is `EDNS` (wrong host) or
+   `EAUTH` (bad password).
+3. Rotate the IONOS mailbox password (RUNBOOK H1) and set it in **both** Vercel and
+   `.env.local`. That resolves the `EAUTH` case regardless.
+
+**Diagnostic note:** the failure is *graceful* — generic message to the visitor, real error
+server-side, no PII logged. So the error handling is correct; only the credentials are wrong.
 
 **Note:** the failure path itself behaved correctly — graceful 500, generic message to
 the client, real error logged server-side, and **no submitter email address in the log**
@@ -192,7 +212,7 @@ the client, real error logged server-side, and **no submitter email address in t
 
 ---
 
-### 🔴 E15 — Vercel did not auto-deploy the Phase 1 push
+### ✅ E15 — Vercel did not auto-deploy the Phase 1 push *(resolved)*
 Commit `3b3b362` was pushed to `origin/main` at ~22:14 (confirmed: `git ls-remote origin
 main` matches local `HEAD`). **Seven minutes later production was still serving the old
 build.**
@@ -214,8 +234,11 @@ error *objects* that the client then tries to render as React children.
 3. If **failed**: read the build log (the build passes locally, so suspect env/config).
 4. If **queued/building**: nothing wrong, it was just slower than the poll window.
 
-Until this is resolved, **every later phase will also fail to reach production**, so it
-blocks the whole sequence.
+**Resolution:** it deployed on its own once the Next.js security upgrade (E16) was pushed.
+Production went to `age: 0` and began serving the new build. The earlier delay was most
+likely a queued or slow build rather than a broken integration — the poll window was simply
+too short. No action was needed. Worth remembering that a Vercel deploy can take
+appreciably longer than the ~7 minutes assumed here.
 
 ---
 

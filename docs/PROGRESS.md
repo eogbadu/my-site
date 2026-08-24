@@ -80,6 +80,19 @@ have left ~20 advisories open. See ERRORS E16.
 
 ⚠️ **Vercel PR #1 must be CLOSED, not merged** — merging it would downgrade next to 15.5.9.
 
+### 2026-08-24 — Phase 1 verified in production
+
+Deploy landed after the security push. Verified against `https://www.ekeleogbadu.io`:
+
+| Check | Result |
+|---|---|
+| All 10 routes | `200` |
+| Unknown path | `404` |
+| Validation error (the crash case) | `400` + `fieldErrors` string arrays ✅ |
+| Honeypot filled | `204` ✅ |
+| Rate limit, 7 requests | 5 pass, 6th and 7th `429` ✅ (warm-lambda reuse held) |
+| **Valid submission** | **`500` — mail delivery is broken, see E14** ⚠️ |
+
 ## Phase completion checklist
 
 Before marking a phase ✅:
