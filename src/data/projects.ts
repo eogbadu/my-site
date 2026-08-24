@@ -8,8 +8,11 @@ export const projects: Project[] = [
       "Mobile-first, context-aware personal time assistant. Learns your routines, commute, meals, sleep, and calendar to tell you what to do next — without making you maintain another productivity system.",
     tags: ["Swift", "Kotlin", "FastAPI", "PostgreSQL", "LLM"],
     repo: "https://github.com/eogbadu/TimeSense",
-    // TODO: add a screenshot at /public/projects/timesense.webp — this is the
-    // flagship project and currently the only card rendering without an image.
+    image: "/projects/timesense.webp",
+    video: "/video/timesense-demo.mp4",
+    videoPoster: "/video/timesense-demo-poster.webp",
+    imageAlt:
+      "Three TimeSense app screens: the reasoning behind a recommendation, the Now screen suggesting a 60-minute gym session, and weekly activity insights",
     featured: true,
   },
   {
