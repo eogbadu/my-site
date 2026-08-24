@@ -114,6 +114,15 @@ unstyled), and rewrote the README, which was still `create-next-app` boilerplate
 `@mdx-js/mdx` + `remark-gfm` to `dependencies` (they are runtime deps); added
 `server-only`, `@types/mdx`; bumped `eslint-config-next` to match Next 15.5.23.
 
+**Verified in production** after deploy:
+
+| Check | Result |
+|---|---|
+| `/blog/hello-world` | `<h1 class="text-3xl font-bold mt-2 mb-3">`, `<pre class="rounded-xl bg-slate-950 ...">` — **styled live for the first time** |
+| Footer | renders `© 2025–present Ekele Ogbadu. All rights reserved.` |
+| `<html>` | carries the Geist + Geist Mono variable classes |
+| All 10 routes | `200`; unknown path `404` |
+
 ## Phase completion checklist
 
 Before marking a phase ✅:
