@@ -10,7 +10,7 @@ Setup, environment, deploy procedures, and the action items only a human can do.
 
 | # | Action | Needed before | Status |
 |---|---|---|---|
-| H1 | **Set the working `SMTP_PASS` in Vercel** and confirm `SMTP_USER=contact@ekeleogbadu.io` there, then redeploy. Local is done and verified | **Now** | 🟡 half done |
+| H1 | ~~Set `SMTP_PASS` in Vercel~~ — **done**; live form verified returning `{ok:true}` | — | ✅ |
 | H2 | Vercel → **Storage → Neon (Marketplace)** → create DB. Enable branch-per-preview | Phase 7 | ⬜ |
 | H3 | `npm i -g vercel && vercel link && vercel env pull .env.local` | Phase 7 | ⬜ |
 | H4 | Create **two** GitHub OAuth Apps (one callback URL each) | Phase 8 | ⬜ |
@@ -18,7 +18,7 @@ Setup, environment, deploy procedures, and the action items only a human can do.
 | H6 | **Run migrate + seed against production, and verify the row exists** | Before deploying Phase 10 | ⬜ |
 | H7 | Vercel → Analytics tab → enable Web Analytics **and** Speed Insights | Phase 11 | ⬜ |
 | H8 | Compress the 5 large PNGs — **keep `resumetailor_1/_2.png`** | Phase 4 | ⬜ |
-| H9 | Supply real project URLs + Google Scholar ID (or confirm removal) | Phase 4 | ⬜ |
+| H9 | ~~Real project URLs + Scholar ID~~ — **done**. Remaining: make `job-matching-platform` public (or supply a live ResumeTailor URL) to restore that card's links | Anytime | 🟡 |
 | H10 | Confirm nothing uses the IONOS MariaDB, then drop the WordPress tables | Any time — *not part of this project* | ⬜ |
 | H11 | Add `www.ekeleogbadu.io` to Google Search Console, submit `/sitemap.xml` | After Phase 3 | ⬜ |
 

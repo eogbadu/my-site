@@ -135,13 +135,28 @@ the page component.
 
 ---
 
-### 🔴 E10 — Placeholder URLs live in production
+### ✅ E10 — Placeholder URLs live in production
 - `src/data/projects.ts:10` → `https://example.com`
 - `src/data/projects.ts:11,21` → `https://github.com/yourhandle/…` (404s)
 - `src/components/SocialLinks.tsx:19` → `scholar.google.com/citations?user=XXXX`
 
 A broken Google Scholar link on a researcher's homepage is worse than no link.
-**Fix:** Phase 4 — needs real URLs from the user (RUNBOOK H9).
+
+**Fixed (2026-08-25)** after checking each candidate URL anonymously rather than trusting
+the names:
+
+| URL | Anonymous result | Action |
+|---|---|---|
+| `scholar.google.com/citations?user=gO-0Q98AAAAJ` | 200 | used |
+| `github.com/eogbadu/SCOUT-plus-plus` | 200 | used (note the capitalization — `scout-plus-plus` also redirects, but the canonical name is better) |
+| `github.com/eogbadu/resumetailor` | **404** | does not exist |
+| `github.com/eogbadu/job-matching-platform` | **404** to visitors | the real ResumeTailor repo, but **private** |
+
+ResumeTailor's `url` and `repo` were therefore **removed** rather than pointed at a private
+repo — `ProjectCard` already degrades to "Details coming soon". Linking a private repo
+would have reproduced exactly the dead-link problem this entry is about.
+
+**Open:** add `repo` when `job-matching-platform` goes public, and `url` if a live demo exists.
 
 ---
 
@@ -259,8 +274,12 @@ POST /api/contact  (valid body)  ->  {"ok":true}  [200]
 `eogbadu@umbc.edu` in Vercel. Local now matches production. Deleted `.env.local.bak`,
 which still held the stale password.
 
-**Still required:** set the working `SMTP_PASS` in **Vercel** and confirm `SMTP_USER` there
-is `contact@ekeleogbadu.io`, then redeploy. Until then production still 500s.
+**RESOLVED IN PRODUCTION (2026-08-25).** The user set `SMTP_PASS` in Vercel. A valid
+submission to the live endpoint now returns:
+```
+POST https://www.ekeleogbadu.io/api/contact  ->  {"ok":true}  [200]
+```
+The contact form delivers mail for the first time since it was built.
 
 **Diagnostic lesson:** a `535` means "authentication failed", which reads as *bad password*
 and pulls you toward rotating credentials. A nonexistent account produces the identical

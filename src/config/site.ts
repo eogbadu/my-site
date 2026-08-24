@@ -89,11 +89,9 @@ export const siteConfig = {
       icon: "github",
       color: "#181717",
     },
-    // TODO: replace with the real Google Scholar profile id, or remove this entry.
-    // A dead link on a researcher's homepage is worse than no link at all.
     {
       name: "Google Scholar",
-      href: "https://scholar.google.com/citations?user=XXXX",
+      href: "https://scholar.google.com/citations?user=gO-0Q98AAAAJ&hl=en",
       icon: "scholar",
       color: "#4285F4",
     },

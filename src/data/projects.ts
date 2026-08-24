@@ -7,9 +7,10 @@ export const projects: Project[] = [
     summary:
       "AI-powered resume & cover letter generator with job matching and auto-apply workflow.",
     tags: ["Next.js", "OpenAI", "PostgreSQL", "Tailwind"],
-    url: "https://example.com", // replace later
-    repo: "https://github.com/yourhandle/resumetailor", // optional
-    image: "/projects/resumetailor_3.png", // add later
+    // No links yet: the repo (eogbadu/job-matching-platform) is private, so a link
+    // would 404 for visitors. Add `repo` when it goes public, and `url` when a live
+    // demo exists. The card renders "Details coming soon" in the meantime.
+    image: "/projects/resumetailor_3.png",
     featured: true,
   },
   {
@@ -18,8 +19,8 @@ export const projects: Project[] = [
     summary:
       "Toolkit for multimodal HRI experiments and dataset benchmarking of instruction grounding.",
     tags: ["Python", "PyTorch", "Vision-Language", "Evaluation"],
-    repo: "https://github.com/yourhandle/scout-plus-plus",
-    image: "/projects/scout.png", // add later
+    repo: "https://github.com/eogbadu/SCOUT-plus-plus",
+    image: "/projects/scout.png",
     featured: true,
   },
   {
@@ -28,7 +29,7 @@ export const projects: Project[] = [
     summary:
       "Constraint-aware scheduler for Field Service Representatives across multiple systems.",
     tags: ["TypeScript", "Algorithms", "UX"],
-    image: "/projects/fsrplanner.png", // add later
+    image: "/projects/fsrplanner.png",
     featured: true,
   },
 ];
