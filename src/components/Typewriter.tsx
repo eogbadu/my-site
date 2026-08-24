@@ -39,7 +39,6 @@ export default function Typewriter({
 
     const current = words[index] ?? "";
     const isWordDone = text === current;
-    const isEmpty = text.length === 0;
 
     // Decide next delay
     let delay = typingSpeed;

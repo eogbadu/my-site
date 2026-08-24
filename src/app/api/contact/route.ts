@@ -3,6 +3,7 @@ import nodemailer, { type Transporter } from "nodemailer";
 import { z } from "zod";
 
 import { rateLimit, clientKeyFromRequest } from "@/lib/rate-limit";
+import { env, requireSmtpCredentials } from "@/lib/env";
 
 /**
  * Why the bounds matter: App Router route handlers don't apply the old Pages-API
@@ -66,11 +67,10 @@ let transporter: Transporter | null = null;
 function getTransporter(user: string, pass: string): Transporter {
   if (transporter) return transporter;
 
-  const port = Number(process.env.SMTP_PORT || 587);
   transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.ionos.com",
-    port,
-    secure: process.env.SMTP_SECURE === "true" || port === 465,
+    host: env.SMTP_HOST,
+    port: env.SMTP_PORT,
+    secure: env.SMTP_SECURE || env.SMTP_PORT === 465,
     auth: { user, pass },
     pool: true,
     maxConnections: 1,
@@ -122,10 +122,11 @@ export async function POST(req: NextRequest) {
       return new NextResponse(null, { status: 204, headers: rateHeaders });
     }
 
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASS;
-
-    if (!user || !pass) {
+    let user: string;
+    let pass: string;
+    try {
+      ({ user, pass } = requireSmtpCredentials());
+    } catch {
       console.error("[contact] SMTP not configured");
       return json(
         { ok: false, formError: "Email service unavailable. Please try again later." },
@@ -136,7 +137,7 @@ export async function POST(req: NextRequest) {
 
     const info = await getTransporter(user, pass).sendMail({
       from: user, // must be the authenticated mailbox, or IONOS rejects on SPF/DMARC
-      to: process.env.MAIL_TO || user,
+      to: env.MAIL_TO || user,
       subject: `New contact from ${name}`,
       replyTo: email,
       text: message,

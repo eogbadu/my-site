@@ -8,7 +8,7 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | # | Phase | Status | Commit | Notes |
 |---|---|---|---|---|
 | 1 | Contact form: fix crash + restore hardening | ✅ | `c20e98a` | Mail delivery unverifiable locally — see ERRORS E14 |
-| 2 | Config, styling, build hygiene | ⬜ | — | |
+| 2 | Config, styling, build hygiene | ✅ | `143d5fc` | Fixed E4–E9; lint now fully clean |
 | 3 | `siteConfig` + full SEO pass | ⬜ | — | Blocked on H9 (real URLs) for the placeholder fix |
 | 4 | Accessibility + images | ⬜ | — | Needs H8 (image compression) |
 | 5 | Dark mode toggle | ⬜ | — | **Requires Phase 2 first** (unlayered `body{}` fix) |
@@ -92,6 +92,27 @@ Deploy landed after the security push. Verified against `https://www.ekeleogbadu
 | Honeypot filled | `204` ✅ |
 | Rate limit, 7 requests | 5 pass, 6th and 7th `429` ✅ (warm-lambda reuse held) |
 | **Valid submission** | **`500` — mail delivery is broken, see E14** ⚠️ |
+
+### 2026-08-24 — Phase 2 complete
+
+Fixed **E4, E5, E6, E7, E8, E9**. Lint went from 3 warnings to **zero**.
+
+| Change | Verified by |
+|---|---|
+| MDX map moved to the correct location + named export | `/blog/hello-world` now emits `<h1 class="text-3xl font-bold...">` — **styled for the first time** |
+| `next/font` Geist wired | built CSS has `--font-sans:var(--font-geist-sans)` with the variable defined; `<html>` carries the classes |
+| Unlayered `body{}` removed | only remaining `body` rule is inside `@media print` |
+| `tailwind.config.ts` deleted, plugin removed | `.line-clamp-3` still emitted by v4 core |
+| Next 15 async `params` | typecheck clean, `/blog/tag/meta` → 200 |
+| Footer year | renders `© 2025–present` |
+| `src/lib/env.ts` + `.env.example` | wired into the contact route; no raw `process.env` left there |
+
+Also added `blockquote`, `hr`, and GFM `table`/`th`/`td` to the MDX map (previously
+unstyled), and rewrote the README, which was still `create-next-app` boilerplate.
+
+**Deps:** removed `@tailwindcss/line-clamp`, `autoprefixer`, `mdx@0.3.1`; moved
+`@mdx-js/mdx` + `remark-gfm` to `dependencies` (they are runtime deps); added
+`server-only`, `@types/mdx`; bumped `eslint-config-next` to match Next 15.5.23.
 
 ## Phase completion checklist
 

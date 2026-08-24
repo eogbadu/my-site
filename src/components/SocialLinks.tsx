@@ -1,4 +1,4 @@
-import { Github, Linkedin, Twitter, Mail, Globe } from "lucide-react";
+import { Github, Linkedin, Mail, Globe } from "lucide-react";
 
 export default function SocialLinks() {
   const links = [

@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ekeleogbadu.io
 
-## Getting Started
+Personal portfolio site — projects, research, résumé, and a blog.
 
-First, run the development server:
+**Live:** https://www.ekeleogbadu.io
+
+## Stack
+
+- **Next.js 15** (App Router, Turbopack) · **React 19** · **TypeScript** (`strict`)
+- **Tailwind CSS v4** — CSS-first config; there is deliberately no `tailwind.config.ts`
+  (v4 does not load one without an `@config` directive, so it was inert and misleading)
+- **MDX** for blog content, **zod** for validation, **nodemailer** for the contact form
+- **lucide-react** for icons, **next/font** for Geist
+
+Deployed on **Vercel**. IONOS provides DNS and email only. Note the apex redirects to
+`www`, so **`https://www.ekeleogbadu.io` is the canonical origin**.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then fill in the SMTP values
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev      # dev server (Turbopack)
+npm run build    # production build
+npm run start    # serve the production build
+npm run lint     # eslint
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+npx tsc --noEmit # type check
 
-## Learn More
+# Diagnose SMTP credentials without a deploy cycle:
+node --env-file=.env.local scripts/check-smtp.mjs
+node --env-file=.env.local scripts/check-smtp.mjs --send
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Environment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+All variables are **server-only**. Never add a `NEXT_PUBLIC_` prefix to any of them —
+that inlines the value into the browser bundle. `src/lib/env.ts` validates them at import
+time with zod, so a missing key fails loudly and by name.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See `.env.example` for the full list.
 
-## Deploy on Vercel
+## Project layout
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  app/                  routes (App Router)
+    api/contact/        contact form endpoint — rate limited, honeypot, zod validated
+    blog/               blog index, per-tag pages, and MDX posts
+  components/           UI components
+    mdx-components.tsx  styled element map for MDX content
+  mdx-components.tsx    Next.js convention file — must be here and named-export
+                        useMDXComponents, or MDX renders unstyled
+  config/               site-wide configuration
+  data/                 typed content: projects, research, résumé, posts
+  lib/                  utilities: env, tags, grouping, rate limiting
+  types/                shared content types
+scripts/                operational scripts
+docs/                   engineering docs — see below
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Documentation
+
+| File | Purpose |
+|---|---|
+| `CLAUDE.md` | Project context and landmines |
+| `docs/PROGRESS.md` | Phase-by-phase status and session log |
+| `docs/DECISIONS.md` | Architecture decisions, including rejected alternatives |
+| `docs/ERRORS.md` | Bugs found, root causes, fixes, gotchas |
+| `docs/RUNBOOK.md` | Environment, commands, deploy, action items |
+
+## Deploying
+
+Vercel deploys `main` automatically on push. Roll back with `git revert` and push;
+production redeploys in about ninety seconds.

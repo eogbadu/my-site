@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { posts } from "@/data/posts";
 import { tagToSlug, slugToLabel } from "@/lib/tags";
 
-type Props = { params: { tag: string } };
+// Next 15: `params` is a Promise. Reading it synchronously works today only via a
+// deprecation shim that is removed in Next 16.
+type Props = { params: Promise<{ tag: string }> };
 
 // Pre-build pages for each known tag (based on your posts registry)
 export function generateStaticParams() {
@@ -16,16 +18,18 @@ export function generateStaticParams() {
 }
 
 // Set nice <title> and meta for each tag page
-export function generateMetadata({ params }: Props) {
-  const label = slugToLabel(params.tag);
+export async function generateMetadata({ params }: Props) {
+  const { tag } = await params;
+  const label = slugToLabel(tag);
   return {
     title: `Tag: ${label}`,
     description: `Posts tagged with ${label}`,
   };
 }
 
-export default function TagPage({ params }: Props) {
-  const tagSlug = params.tag.toLowerCase();
+export default async function TagPage({ params }: Props) {
+  const { tag } = await params;
+  const tagSlug = tag.toLowerCase();
 
   // Filter posts that include this tag (slug-comparison so labels can vary)
   const filtered = posts.filter((p) =>

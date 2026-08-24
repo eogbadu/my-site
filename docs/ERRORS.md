@@ -53,7 +53,7 @@ is the wrong way to do this.
 
 ---
 
-### 🔴 E4 — MDX component styling never applied
+### ✅ E4 — MDX component styling never applied
 `src/app/mdx-components.tsx` is in the **wrong location** and has the **wrong export
 shape**. Next resolves `src/mdx-components.tsx` (project root or `src/`) exporting a
 **named** `useMDXComponents`; this file is under `src/app/` with a *default* export.
@@ -61,22 +61,28 @@ Nothing imports it — `grep` confirms zero references.
 
 **Verified live:** `/blog/hello-world` emits bare `<h1>`, `<p>`, `<ul>`, `<pre>` with
 no class attributes at all.
-**Fix:** Phase 2 — move the map to `src/components/mdx-components.tsx` (permanent, reused
-by the runtime MDX renderer) plus a thin `src/mdx-components.tsx` shim (deleted in Phase 10).
+**Fixed in Phase 2** — map moved to `src/components/mdx-components.tsx` (permanent, reused
+by the runtime MDX renderer later) plus a thin `src/mdx-components.tsx` shim with a *named*
+`useMDXComponents` (deleted in Phase 10).
+
+**Verified:** `/blog/hello-world` now emits
+`<h1 class="text-3xl font-bold mt-2 mb-3">`, `<p class="leading-7 my-4 ...">`,
+`<pre class="rounded-xl bg-slate-950 ...">`. Also added `blockquote`, `hr`, and GFM
+`table`/`th`/`td` styling, which the original map lacked.
 
 ---
 
-### 🔴 E5 — Footer copyright frozen at build time
+### ✅ E5 — Footer copyright frozen at build time
 `src/components/Footer.tsx:4` calls `new Date().getFullYear()` in a **server component**,
 so the value is baked into static HTML when the page is prerendered.
 
 **Verified live:** the site renders `© 2025` as of 2026-08-24 — stale by eight months.
-**Fix:** Phase 3 — drop the dynamic year entirely; render
-`© {copyrightStartYear}–present` from `siteConfig`. Zero JS, never stale.
+**Fixed in Phase 2** — renders `© 2025–present`. A range needs no JS, never goes stale, and
+cannot be frozen by prerendering. `SITE_START_YEAR` moves into `siteConfig` in Phase 3.
 
 ---
 
-### 🔴 E6 — Unlayered CSS silently overrides Tailwind utilities
+### ✅ E6 — Unlayered CSS silently overrides Tailwind utilities
 `src/app/globals.css:22-26` sets `background` / `color` / `font-family` on `body`
 **outside any `@layer`**. `@import "tailwindcss"` puts all utilities *inside*
 `@layer utilities`, and **unlayered declarations beat layered ones** in the cascade.
@@ -86,37 +92,46 @@ have never had any effect — the background comes from the CSS variable instead
 **Why it matters:** adding a `.dark` class toggle without removing these first produces
 a toggle that appears to do nothing. **Phase 2 must precede Phase 5.**
 
+**Fixed in Phase 2.** Verified in the built CSS: the only remaining `body{}` rule is inside
+`@media print` (the intentional résumé print style). Body colors now come from the
+`bg-white dark:bg-slate-950` utilities, which take effect for the first time. Also aligned
+`--background` to `#020617` so the CSS variable matches the `slate-950` utility.
+
 ---
 
-### 🔴 E7 — `tailwind.config.ts` is inert
+### ✅ E7 — `tailwind.config.ts` is inert
 Tailwind v4 uses CSS-first configuration and does **not** auto-load `tailwind.config.ts`
 without an explicit `@config` directive in the CSS — which `globals.css` lacks.
 
 **Consequence:** the registered `@tailwindcss/line-clamp` plugin is not loaded.
 `line-clamp-3` works anyway because it's core in v4. The config file is actively
 misleading.
-**Fix:** Phase 2 — delete the file; drop the plugin and `autoprefixer`.
+**Fixed in Phase 2** — file deleted; `@tailwindcss/line-clamp`, `autoprefixer`, and the
+unrelated abandoned `mdx@0.3.1` package removed. **Verified** `.line-clamp-3` is still
+emitted by Tailwind v4 core, so the 5 usages are unaffected.
 
 ---
 
-### 🔴 E8 — Dangling font variables; site renders in Arial
+### ✅ E8 — Dangling font variables; site renders in Arial
 `globals.css:11-12` maps `--font-sans` / `--font-mono` to `var(--font-geist-sans)` /
 `var(--font-geist-mono)`, which are **never defined** — `next/font` is not used anywhere.
 Line 25 then hardcodes `font-family: Arial, Helvetica, sans-serif`.
 
 The README claims the project uses `next/font` to optimize Geist. It doesn't.
-**Fix:** Phase 2 — wire `next/font/google` properly so the existing `@theme inline`
-mapping resolves.
+**Fixed in Phase 2** — `next/font/google` Geist + Geist_Mono wired in `layout.tsx`.
+**Verified:** `<html>` carries the generated variable classes and the built CSS contains
+`--font-sans:var(--font-geist-sans)` with `--font-geist-sans` actually defined.
 
 ---
 
-### 🔴 E9 — Next 14 `params` signature (latent)
+### ✅ E9 — Next 14 `params` signature (latent)
 `src/app/blog/tag/[tag]/page.tsx:7` declares `params: { tag: string }` and reads it
 synchronously. Next 15 makes `params` a `Promise`.
 
 **Not currently broken** — verified `/blog/tag/meta` renders correctly in production via
 Next 15's deprecation shim. That shim is removed in Next 16.
-**Fix:** Phase 2 — `Promise<{ tag: string }>` + `await`.
+**Fixed in Phase 2** — `Promise<{ tag: string }>` + `await` in both `generateMetadata` and
+the page component.
 
 ---
 
