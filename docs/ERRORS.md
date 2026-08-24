@@ -192,6 +192,33 @@ the client, real error logged server-side, and **no submitter email address in t
 
 ---
 
+### 🔴 E15 — Vercel did not auto-deploy the Phase 1 push
+Commit `3b3b362` was pushed to `origin/main` at ~22:14 (confirmed: `git ls-remote origin
+main` matches local `HEAD`). **Seven minutes later production was still serving the old
+build.**
+
+**Evidence the old code is still live:**
+```
+POST https://www.ekeleogbadu.io/api/contact  {"name":"a","email":"bad","message":"x"}
+→ {"ok":false,"errors":[{"field":"name","message":"..."}]}     # old object shape
+```
+The new build returns `{"ok":false,"fieldErrors":{...}}`. Homepage also shows
+`age: 37466` (~10 h) with `x-vercel-cache: HIT`.
+
+**Side benefit:** this is a clean live reproduction of E1 — production really does return
+error *objects* that the client then tries to render as React children.
+
+**Needs the user (cannot be checked without Vercel dashboard access):**
+1. Vercel → project → Deployments — is there a build for `3b3b362`? Queued, failed, or absent?
+2. If **absent**: the Git integration is likely disconnected → Settings → Git → reconnect.
+3. If **failed**: read the build log (the build passes locally, so suspect env/config).
+4. If **queued/building**: nothing wrong, it was just slower than the poll window.
+
+Until this is resolved, **every later phase will also fail to reach production**, so it
+blocks the whole sequence.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
