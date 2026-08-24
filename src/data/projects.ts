@@ -81,7 +81,7 @@ The explainability work matters most to me. A recommendation you cannot interrog
     repo: "https://github.com/eogbadu/SCOUT-plus-plus",
     image: "/projects/scout.webp",
     imageAlt:
-      "SCOUT++ Tool Kit illustration — hand tools arranged in an open leather case",
+      "SCOUT++ example task: a commander instruction \"move forward and send an image of the hallway on the left\", the robot's navigator-view photo of a corridor, and the model's interpreted command alongside the reference",
     featured: true,
     year: "2025",
     role: "Lead researcher",
@@ -96,6 +96,23 @@ The explainability work matters most to me. A recommendation you cannot interrog
     body: `SCOUT++ supports research into how well vision-language models actually ground natural-language instructions in what a robot can see.
 
 The headline finding is a negative one. Adding synchronized visual input to GPT-4 *degraded* instruction-classification accuracy relative to text alone, with the multimodal variant more prone to vague or hallucinated outputs. For safety-critical settings like urban disaster response, that is exactly the kind of result that needs publishing rather than tuning away.`,
+    gallery: [
+      {
+        src: "/projects/scout-release.webp",
+        alt: "SCOUT++ public release overview: a Language/Vision/Action Venn diagram meeting at multimodal instruction data, with counts of 12,000 model input rows, 12,000 multimodal output rows, 11,980 text-only GPT outputs, and 12,003 aligned navigator-view images",
+        caption: "Public release overview — an unofficial derivative of the ARL SCOUT corpus, for research use.",
+      },
+      {
+        src: "/projects/scout-pipeline.webp",
+        alt: "SCOUT++ processing pipeline from SCOUT-derived inputs through cleaning and normalization to text-only and multimodal GPT outputs, ending in checksum validation",
+        caption: "From raw corpus rows to model-ready multimodal artifacts, with checksums for reproducibility.",
+      },
+      {
+        src: "/projects/scout-artifacts.webp",
+        alt: "The four core SCOUT++ release artifacts: gpt_input.csv, output_results_full.csv, gpt_text_output_results.csv, and the aligned navigator-view images, plus sample data, schema, checksums, and a validation script",
+        caption: "What ships in the public release.",
+      },
+    ],
     links: [
       { label: "Related paper (PDF)", href: "/papers/grounded-instruction-llms.pdf" },
     ],
