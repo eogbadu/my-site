@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { posts } from "@/data/posts";
-import { tagToSlug, slugToLabel } from "@/lib/tags";
+import SectionHeader from "@/components/SectionHeader";
+import { getTagCounts } from "@/db/queries";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -11,47 +11,46 @@ export const metadata: Metadata = buildMetadata({
   path: "/blog/tag",
 });
 
-export default function TagIndexPage() {
-  const counts = new Map<string, number>();
+/**
+ * force-dynamic, not ISR.
+ *
+ * As a static route this would be prerendered at build time, which means reading
+ * the database during `next build` — the exact coupling avoided everywhere else,
+ * where a Neon outage would fail an unrelated deploy.
+ *
+ * Rendering per request costs almost nothing here because the query itself is
+ * wrapped in unstable_cache: steady-state traffic still makes zero database
+ * calls, it just re-renders from cached data. The Full Route Cache is the only
+ * thing given up, and correctness of the deploy pipeline is worth more.
+ */
+export const dynamic = "force-dynamic";
 
-  for (const post of posts) {
-    for (const t of post.tags ?? []) {
-      const slug = tagToSlug(t);
-      counts.set(slug, (counts.get(slug) ?? 0) + 1);
-    }
-  }
-
-  const entries = Array.from(counts.entries()).sort((a, b) =>
-    a[0].localeCompare(b[0])
-  );
+export default async function TagIndexPage() {
+  const tags = await getTagCounts();
 
   return (
-    <section className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold">Tags</h1>
-        <p className="text-ink-muted max-w-prose">
-          Browse posts by topic. Tags are a light-weight way to organize notes
-          across projects, research, and progress logs.
-        </p>
-      </header>
+    <section>
+      <SectionHeader
+        as="h1"
+        eyebrow="Index"
+        title="Tags"
+        description="Browse posts by topic."
+        action={{ href: "/blog", label: "All posts" }}
+      />
 
-      {entries.length === 0 ? (
-        <p className="text-sm text-ink-muted">
-          No tags yet — once you add tags to posts in{" "}
-          <code>src/data/posts.ts</code>, they’ll show up here.
-        </p>
+      {tags.length === 0 ? (
+        <p className="text-ink-muted">No tags yet.</p>
       ) : (
         <ul className="flex flex-wrap gap-2 text-sm">
-          {entries.map(([slug, count]) => (
-            <li key={slug}>
+          {tags.map((t) => (
+            <li key={t.slug}>
               <Link
-                href={`/blog/tag/${slug}`}
-                className="inline-flex items-center rounded-full border border-rule px-3 py-1 hover:bg-surface"
+                href={`/blog/tag/${t.slug}`}
+                className="inline-flex items-center gap-2 rounded-full border border-rule px-3.5 py-1.5 text-ink-muted hover:text-ink hover:border-ink transition focus:outline-none focus:ring-2 focus:ring-accent"
               >
-                <span>{slugToLabel(slug)}</span>
-                <span className="ml-2 text-xs text-ink-faint">
-                  {count} post{count === 1 ? "" : "s"}
-                </span>
+                {/* The author's original label, not a lossy guess from the slug. */}
+                <span>{t.label}</span>
+                <span className="numeral">{t.count}</span>
               </Link>
             </li>
           ))}

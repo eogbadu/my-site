@@ -1,85 +1,74 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { posts } from "@/data/posts";
-import { tagToSlug, slugToLabel } from "@/lib/tags";
+import SectionHeader from "@/components/SectionHeader";
+import { getPostsByTagSlug } from "@/db/queries";
 import { buildMetadata } from "@/lib/metadata";
+import { slugToLabel } from "@/lib/tags";
 
-// Next 15: `params` is a Promise. Reading it synchronously works today only via a
-// deprecation shim that is removed in Next 16.
 type Props = { params: Promise<{ tag: string }> };
 
-// Tags all come from the static posts registry, so an unlisted tag should 404
-// rather than render on demand. Without this, notFound() returned HTTP 200 — a
-// soft 404. NOTE: Phase 10 moves posts to the database and removes
-// generateStaticParams here, at which point this must go too.
-export const dynamicParams = false;
+/**
+ * No generateStaticParams and no dynamicParams:false any more.
+ *
+ * Both were correct while tags came from a static array. Now that tags live in
+ * the database, freezing the set at build time would 404 every tag page created
+ * after the last deploy. Unknown tags simply return no posts and 404 below.
+ */
+export const revalidate = 3600;
 
-// Pre-build pages for each known tag (based on your posts registry)
-export function generateStaticParams() {
-  const set = new Set<string>();
-  for (const p of posts) {
-    (p.tags ?? []).forEach((t) => set.add(tagToSlug(t)));
-  }
-  return Array.from(set).map((slug) => ({ tag: slug }));
-}
-
-// Set nice <title> and meta for each tag page
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params;
-  const label = slugToLabel(tag);
+  const posts = await getPostsByTagSlug(tag);
+  const label = posts[0]?.tags[posts[0].tagSlugs.indexOf(tag)] ?? slugToLabel(tag);
+
   return buildMetadata({
     title: `Tag: ${label}`,
     description: `Blog posts tagged with ${label}.`,
     path: `/blog/tag/${tag}`,
+    noindex: posts.length === 0,
   });
 }
 
 export default async function TagPage({ params }: Props) {
   const { tag } = await params;
-  const tagSlug = tag.toLowerCase();
+  const posts = await getPostsByTagSlug(tag);
 
-  // Filter posts that include this tag (slug-comparison so labels can vary)
-  const filtered = posts.filter((p) =>
-    (p.tags ?? []).some((t) => tagToSlug(t) === tagSlug)
-  );
+  if (posts.length === 0) notFound();
 
-  if (filtered.length === 0) {
-    // Unknown tag → show your 404 page
-    return notFound();
-  }
-
-  // newest first (string compare is fine if date is ISO like "2025-10-19")
-  const sorted = [...filtered].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const label = slugToLabel(tagSlug);
+  // Recover the author's original label rather than guessing it from the slug —
+  // slugToLabel would render "trustworthy-ai" as "Trustworthy Ai".
+  const label = posts[0].tags[posts[0].tagSlugs.indexOf(tag)] ?? slugToLabel(tag);
 
   return (
-    <section className="space-y-6">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-bold">Tag: {label}</h1>
-        <p className="text-ink-muted">
-          {sorted.length} post{sorted.length === 1 ? "" : "s"}
-        </p>
-      </header>
+    <section>
+      <SectionHeader
+        as="h1"
+        eyebrow="Tagged"
+        title={label}
+        description={`${posts.length} post${posts.length === 1 ? "" : "s"}.`}
+        action={{ href: "/blog/tag", label: "All tags" }}
+      />
 
-      <ul className="space-y-4">
-        {sorted.map((p) => (
-          <li
-            key={p.slug}
-            className="rounded-2xl border border-rule p-4"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-              <Link
-                href={`/blog/${p.slug}`}
-                className="text-lg font-semibold hover:opacity-80"
-              >
-                {p.title}
-              </Link>
-              <span className="text-xs text-ink-faint">{p.date}</span>
+      <ul className="divide-y divide-rule border-t border-rule">
+        {posts.map((p) => (
+          <li key={p.slug} className="py-6">
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-x-6 gap-y-1">
+              <h2 className="font-display text-xl tracking-[-0.01em]">
+                <Link
+                  href={`/blog/${p.slug}`}
+                  className="hover:text-accent transition-colors rounded-sm focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  {p.title}
+                </Link>
+              </h2>
+              <span className="numeral shrink-0">
+                {p.publishedAt?.toISOString().slice(0, 10)}
+              </span>
             </div>
-
             {p.excerpt && (
-              <p className="mt-2 text-sm text-ink-muted line-clamp-3">
+              <p className="mt-2 text-sm leading-relaxed text-ink-muted max-w-[68ch]">
                 {p.excerpt}
               </p>
             )}

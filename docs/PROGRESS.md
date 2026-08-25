@@ -13,10 +13,10 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 4 | Accessibility + images | ✅ | `a2d9b87` | Images compressed in-repo; H8 no longer needed |
 | 5 | Dark mode toggle | ✅ | `e2f30c7` | Token-driven; zero `dark:` variants remain |
 | 6 | De-client `/about` + `/projects/[slug]` | ✅ | `36d382d` | Also fixed a pre-existing soft 404 (E19) |
-| 7 | Database foundation | ⬜ | — | Needs H2, H3. **Branch + Preview** |
-| 8 | Auth + admin shell | ⬜ | — | Needs H4, H5. **Branch + Preview** |
-| 9 | Admin CRUD + MDX renderer | ⬜ | — | **Branch + Preview** |
-| 10 | Blog cutover (riskiest) | ⬜ | — | Needs H6 done *and verified*. **Branch + Preview** |
+| 7 | Database foundation | ✅ code | `161e17d` | On `feat/db-blog-admin`. Needs H2/H3 to run |
+| 8 | Auth + admin shell | ✅ code | `39675c3` | On branch. Needs H4/H5 to sign in |
+| 9 | Admin CRUD + MDX renderer | ✅ code | `80f0aee` | On branch. MDX guard verified directly |
+| 10 | Blog cutover (riskiest) | 🟡 code / ⛔ **DO NOT MERGE** | `pending` | Unverifiable without a database — see below |
 | 11 | View counts + analytics | ⬜ | — | Needs H7 |
 | 12 | Tests, CI, docs | ⬜ | — | |
 
@@ -229,6 +229,38 @@ unknown during SSR and rendering the real icon would guarantee a hydration misma
 
 **Verified** by rendering the real page HTML with `data-theme="dark"` and a self-contained
 CSS inline: background `#0b0b0c`, light text, correct rules and muted labels.
+
+### 2026-08-25 — Phases 7–10 written on `feat/db-blog-admin`
+
+All four phases are coded, typechecked, linted, and building. **None are merged.**
+`main` is untouched and still serving the verified site.
+
+| Phase | State | Blocked on |
+|---|---|---|
+| 7 Database | code complete, migration SQL generated and reviewed | H2/H3 — Neon + `vercel env pull` |
+| 8 Auth | code complete; verified it fails **closed** with no credentials | H4/H5 — GitHub OAuth apps + env |
+| 9 Admin CRUD | code complete; MDX guard verified directly | — |
+| 10 Cutover | code complete, **must not merge yet** | H6 — migrate + seed + verify |
+
+**⛔ Why Phase 10 must not merge.** It deletes `src/app/blog/hello-world/page.mdx` in the
+same commit that adds `/blog/[slug]` — correct, because a static segment always beats a
+dynamic one. But that means the live, indexed `/blog/hello-world` URL is served **only**
+from the database from that commit onward. If the row is not there, that URL 404s.
+
+**Open question, unresolved.** With no database configured, `/blog` returns HTTP 200 while
+stuck on its loading fallback, and `/blog/hello-world` renders 404 *content* with HTTP
+**200** — a soft 404 on the one URL that must not break. This is likely an artifact of the
+query throwing rather than returning null, and should resolve once a real database returns
+a real row. **It has to be confirmed against a live database before merging**, and if
+`notFound()` still yields 200 for a genuinely missing post, that needs fixing first (cf. E19).
+
+**Design decision made during Phase 10:** `/blog`, `/blog/tag`, and `/sitemap.xml` are
+`force-dynamic`. As static routes Next prerenders them at build, which would read the
+database during `next build` — the exact coupling avoided everywhere else. Per-request
+rendering costs almost nothing because the queries are wrapped in `unstable_cache`, so
+steady-state traffic still makes zero database calls; only the Full Route Cache is given up.
+`/sitemap.xml` additionally degrades gracefully, listing all 12 static routes if the
+database is unreachable — verified.
 
 ## Phase completion checklist
 

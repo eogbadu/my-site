@@ -1,22 +1,13 @@
-// next.config.ts
 import type { NextConfig } from "next";
-import createMDX from "@next/mdx";
-import { createRequire } from "node:module";
 
-const require = createRequire(import.meta.url);
-
-const withMDX = createMDX({
-  // (optional) restrict extension explicitly
-  extension: /\.mdx?$/,
-  options: {
-    // pass module paths as strings, not functions (serializable)
-    remarkPlugins: [require.resolve("remark-gfm")],
-    rehypePlugins: [],
-  },
-});
-
+/**
+ * @next/mdx is gone: there are no .mdx route files any more. Post bodies live in
+ * the database and are compiled at request time by next-mdx-remote, so the
+ * remaining MDX dependencies (@mdx-js/mdx, remark-gfm) are runtime deps rather
+ * than build plugins.
+ */
 const nextConfig: NextConfig = {
-  pageExtensions: ["ts", "tsx", "mdx"],
+  pageExtensions: ["ts", "tsx"],
 };
 
-export default withMDX(nextConfig);
+export default nextConfig;

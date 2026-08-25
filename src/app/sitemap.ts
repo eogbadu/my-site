@@ -1,9 +1,8 @@
 import type { MetadataRoute } from "next";
 
 import { absoluteUrl } from "@/config/site";
-import { posts } from "@/data/posts";
 import { projects } from "@/data/projects";
-import { tagToSlug } from "@/lib/tags";
+import { getPublishedPosts, getTagCounts } from "@/db/queries";
 
 /**
  * Static routes plus blog posts and tag pages.
@@ -11,7 +10,7 @@ import { tagToSlug } from "@/lib/tags";
  * Blog entries are derived from src/data/posts.ts today; Phase 10 swaps that for
  * the database while keeping this shape.
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), changeFrequency: "monthly", priority: 1 },
     { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.8 },
@@ -29,24 +28,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const published = posts.filter((p) => !p.draft);
+  // Degrade gracefully: if the database is unreachable the sitemap still lists
+  // every static route rather than failing outright.
+  let postRoutes: MetadataRoute.Sitemap = [];
+  let tagRoutes: MetadataRoute.Sitemap = [];
 
-  const postRoutes: MetadataRoute.Sitemap = published.map((p) => ({
-    url: absoluteUrl(`/blog/${p.slug}`),
-    lastModified: new Date(p.date),
-    changeFrequency: "yearly",
-    priority: 0.6,
-  }));
+  try {
+    const [published, tags] = await Promise.all([getPublishedPosts(), getTagCounts()]);
 
-  const tagRoutes: MetadataRoute.Sitemap = Array.from(
-    new Set(published.flatMap((p) => p.tags ?? []).map(tagToSlug))
-  ).map((tag) => ({
-    url: absoluteUrl(`/blog/tag/${tag}`),
-    changeFrequency: "monthly",
-    priority: 0.3,
-  }));
+    postRoutes = published.map((p) => ({
+      url: absoluteUrl(`/blog/${p.slug}`),
+      lastModified: p.publishedAt ?? undefined,
+      changeFrequency: "yearly",
+      priority: 0.6,
+    }));
+
+    tagRoutes = tags.map((t) => ({
+      url: absoluteUrl(`/blog/tag/${t.slug}`),
+      changeFrequency: "monthly",
+      priority: 0.3,
+    }));
+  } catch (err) {
+    console.error("[sitemap] could not load posts", err);
+  }
 
   return [...staticRoutes, ...projectRoutes, ...postRoutes, ...tagRoutes];
 }
 
-export const revalidate = 3600;
+/** Dynamic for the same reason as /blog: never read the database at build time. */
+export const dynamic = "force-dynamic";
