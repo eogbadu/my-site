@@ -4,36 +4,8 @@ import { z } from "zod";
 
 import { rateLimit, clientKeyFromRequest } from "@/lib/rate-limit";
 import { env, requireSmtpCredentials } from "@/lib/env";
+import { contactSchema } from "@/lib/validation/contact";
 
-/**
- * Why the bounds matter: App Router route handlers don't apply the old Pages-API
- * body cap, so without .max() a single request can push an arbitrarily large
- * payload through to the SMTP provider.
- */
-const contactSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, "Name must be at least 2 characters long.")
-    .max(100, "Name must be 100 characters or fewer."),
-  email: z
-    .email("Please use a valid email address.")
-    .trim()
-    .toLowerCase()
-    .max(254, "Email address is too long."),
-  message: z
-    .string()
-    .trim()
-    .min(10, "Message must be at least 10 characters long.")
-    .max(5000, "Message must be 5000 characters or fewer."),
-  // Honeypot: real users never see this field, so any value means a bot.
-  // Zod strips unknown keys by default, which is why this must be declared
-  // explicitly rather than read off the raw body.
-  //
-  // Deliberately NOT .max(0): that would make zod reject the request with a 400,
-  // which both leaks the field's existence and defeats the silent-204 below.
-  website: z.string().optional().default(""),
-});
 
 const RATE_LIMIT = { limit: 5, windowMs: 10 * 60 * 1000 } as const;
 

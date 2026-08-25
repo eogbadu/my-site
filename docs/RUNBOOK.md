@@ -64,6 +64,61 @@ back it up first and merge, don't clobber:
 cp .env.local .env.local.bak && vercel env pull .env.local.new
 ```
 
+### H2 — Create the Neon database (step by step)
+
+Use the **Vercel Marketplace**, not a standalone Neon account: it injects `DATABASE_URL`
+into Production, Preview, and Development automatically, which removes a whole class of
+"works locally, 500s in production" mistakes.
+
+1. vercel.com → the **my-site** project
+2. **Storage** tab → **Create Database** → **Neon** (listed as Serverless Postgres)
+3. Region: pick one near the functions — **Washington D.C. (iad1)** for US-East
+4. Free plan; connect it to **my-site** and link **all three** environments
+5. Enable **"Create a branch for each preview deployment"** if offered, so preview deploys
+   never touch production data
+
+Dashboard labels shift; the thing to confirm is that **Settings → Environment Variables**
+afterwards lists `DATABASE_URL`.
+
+*Chosen over Supabase because its free tier pauses after 7 days idle and needs a manual
+dashboard unpause — a monthly-posting blog would be found paused and `/blog` would 500.
+Neon autosuspends and resumes transparently. See DECISIONS D1.*
+
+### H3 — Install the CLI, link, and pull env vars
+
+```bash
+npm i -g vercel
+cd ~/Documents/CAREER/PROJECTS/personal_site/my-site
+vercel login
+vercel link                      # select the existing "my-site" project
+```
+
+⚠️ **`vercel env pull` overwrites `.env.local`**, which holds the working SMTP credentials.
+Never run it directly at that file:
+
+```bash
+cp .env.local .env.local.bak
+vercel env pull .env.local.new   # then merge DATABASE_URL into .env.local
+```
+
+Pasting the `DATABASE_URL` line in by hand is a perfectly good alternative.
+
+### H6 — Migrate and seed ⚠️
+
+```bash
+git checkout feat/db-blog-admin
+npm run db:migrate    # creates posts + post_views
+npm run db:seed       # inserts hello-world; idempotent
+```
+
+The seed script prints every row it finds. **Confirm `hello-world` is listed.** If that row
+is absent when the Phase 10 cutover deploys, `/blog/hello-world` — a live, indexed URL —
+returns 404, because the static `.mdx` file is deleted in the same commit.
+
+Still to resolve against a live database before merging: with no database configured,
+`/blog/hello-world` renders 404 content with HTTP **200**. Confirm a real missing post
+returns a real 404 (cf. ERRORS E19).
+
 ### H4 — GitHub OAuth apps
 GitHub → Settings → Developer settings → OAuth Apps. **An OAuth App allows exactly one
 callback URL**, so two apps are required:
