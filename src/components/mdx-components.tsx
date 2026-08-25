@@ -73,6 +73,30 @@ export const mdxComponents: MDXComponents = {
       />
     );
   },
+  /*
+   * Plain <img>, not next/image: post bodies carry arbitrary remote blob URLs,
+   * which next/image cannot optimise without whitelisting every host in
+   * next.config. loading="lazy" covers the practical concern.
+   */
+  img: (props: ComponentPropsWithoutRef<"img">) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className="rounded-lg border border-rule my-4 w-full h-auto"
+      loading="lazy"
+      {...props}
+      alt={props.alt ?? ""}
+    />
+  ),
+  video: (props: ComponentPropsWithoutRef<"video">) => (
+    <video
+      className="rounded-lg border border-rule my-4 w-full"
+      controls
+      preload="none"
+      playsInline
+      {...props}
+    />
+  ),
+
   // remark-gfm tables
   table: (props: ComponentPropsWithoutRef<"table">) => (
     <div className="my-4 overflow-x-auto">

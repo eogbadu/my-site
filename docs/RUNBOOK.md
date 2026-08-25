@@ -119,6 +119,28 @@ Still to resolve against a live database before merging: with no database config
 `/blog/hello-world` renders 404 content with HTTP **200**. Confirm a real missing post
 returns a real 404 (cf. ERRORS E19).
 
+### H12 — Create a Vercel Blob store (for image/video uploads)
+
+The editor's upload button needs somewhere to put files.
+
+1. vercel.com → **my-site** → **Storage** → **Create Database** → **Blob**
+2. Name it anything; connect it to **my-site** and all three environments
+3. It injects `BLOB_READ_WRITE_TOKEN` automatically — confirm it appears under
+   Settings → Environment Variables
+4. Redeploy so the running functions pick it up
+
+Uploads go **browser → Blob directly**, not through a serverless function, because a
+function request body is capped near 4.5 MB and a demo video exceeds that instantly.
+`/api/admin/upload` only issues a short-lived token, and does so behind `requireAdmin()` —
+without that check anyone could mint upload tokens against the store.
+
+Accepted: png, jpeg, webp, avif, gif, mp4, webm — max 100 MB. **SVG is deliberately
+excluded**: it can carry inline `<script>`, and there is no reason to accept an executable
+image format for blog illustrations.
+
+Blob storage is metered. At portfolio traffic the free tier is ample, but it is worth
+knowing that a popular post with a large video is the thing that would consume it.
+
 ### H4 — GitHub OAuth apps
 GitHub → Settings → Developer settings → OAuth Apps. **An OAuth App allows exactly one
 callback URL**, so two apps are required:

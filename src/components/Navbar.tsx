@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
+import AdminLink from "@/components/AdminLink";
 import ThemeToggle from "@/components/ThemeToggle";
 
 import { siteConfig } from "@/config/site";
@@ -53,6 +54,9 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          <li>
+            <AdminLink />
+          </li>
         </ul>
 
         <ThemeToggle />
@@ -90,6 +94,9 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          <li className="pt-1">
+            <AdminLink />
+          </li>
         </ul>
       )}
     </header>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import Link from "next/link";
 
+import MediaUpload from "@/components/admin/MediaUpload";
 import { slugify } from "@/lib/slug";
 import type { ActionResult } from "@/lib/validation/post";
 
@@ -36,6 +37,24 @@ export default function PostForm({
   // Stop auto-slugging once the slug has been edited by hand, or once the post
   // exists — changing a published slug breaks a live URL.
   const [slugLocked, setSlugLocked] = useState(Boolean(initial.id));
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  /** Insert uploaded media at the caret rather than appending at the end. */
+  function insertAtCaret(snippet: string) {
+    const el = bodyRef.current;
+    if (!el) {
+      setValues((v) => ({ ...v, body: v.body + snippet }));
+      return;
+    }
+    const { selectionStart: s, selectionEnd: e } = el;
+    const next = values.body.slice(0, s) + snippet + values.body.slice(e);
+    setValues((v) => ({ ...v, body: next }));
+    const caret = s + snippet.length;
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(caret, caret);
+    });
+  }
 
   function onTitle(title: string) {
     setValues((v) => ({ ...v, title, slug: slugLocked ? v.slug : slugify(title) }));
@@ -109,7 +128,13 @@ export default function PostForm({
 
       <div>
         <label className="block text-sm mb-1" htmlFor="body">Content (MDX)</label>
+
+        <div className="mb-2">
+          <MediaUpload onInsert={insertAtCaret} />
+        </div>
+
         <textarea
+          ref={bodyRef}
           id="body" name="body"
           className={`${field} font-mono text-[13px] leading-6 min-h-[28rem]`}
           value={values.body}
