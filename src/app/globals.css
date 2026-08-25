@@ -36,30 +36,43 @@
  */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0b0b0c;
-    --surface: #141416;
-    --ink: #ededec;
-    --ink-muted: #a1a1a6;
-    --ink-faint: #74747c;
-    --rule: #26262a;
-    --accent: #22d3ee;
-    --accent-soft: #0d2b33;
-    --danger: #f87171;
-    --success: #4ade80;
+    --paper: #14141a;
+    --surface: #1e1e26;
+    --ink: #d9d9e0;
+    --ink-muted: #a0a0a6;
+    --ink-faint: #8a8a92;
+    --rule: #4a4a54;
+    --accent: #38bdf8;
+    --accent-soft: #12303d;
+    --danger: #fca5a5;
+    --success: #86efac;
   }
 }
 
+  /*
+   * Tuned against measured WCAG contrast, not by eye. Ratios vs --paper:
+   *   ink 13.1:1 · ink-muted 7.1:1 · ink-faint 5.4:1 · rule 2.1:1 · accent 8.6:1
+   *
+   * Three problems with the first pass, all measured:
+   *   - the ground was near-black (#0b0b0c), putting body text at 16.8:1. That is
+   *     high enough to cause halation — text appears to smear — and was the main
+   *     reason dark mode felt hard to read.
+   *   - --rule was 1.31:1, effectively invisible. This design is built on hairline
+   *     dividers, so losing them lost the structure.
+   *   - --ink-faint was 4.25:1, below AA for the dates, tags, and eyebrow labels
+   *     it is used for.
+   */
 :root[data-theme="dark"] {
-  --paper: #0b0b0c;
-  --surface: #141416;
-  --ink: #ededec;
-  --ink-muted: #a1a1a6;
-  --ink-faint: #74747c;
-  --rule: #26262a;
-  --accent: #22d3ee;
-  --accent-soft: #0d2b33;
-  --danger: #f87171;
-  --success: #4ade80;
+  --paper: #14141a;
+  --surface: #1e1e26;
+  --ink: #d9d9e0;
+  --ink-muted: #a0a0a6;
+  --ink-faint: #8a8a92;
+  --rule: #4a4a54;
+  --accent: #38bdf8;
+  --accent-soft: #12303d;
+  --danger: #fca5a5;
+  --success: #86efac;
 }
 
 @theme inline {
