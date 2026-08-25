@@ -18,7 +18,7 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 9 | Admin CRUD + MDX renderer | ⬜ | — | **Branch + Preview** |
 | 10 | Blog cutover (riskiest) | ⬜ | — | Needs H6 done *and verified*. **Branch + Preview** |
 | 11 | View counts + analytics | ⬜ | — | Needs H7 |
-| 12 | Tests, CI, docs | ⬜ | — | |
+| 12 | Tests, CI, docs | ✅ | `0d6f8e1` | 22 tests; CI needs no secrets. Found E23 |
 
 ## Current state
 
@@ -229,6 +229,29 @@ unknown during SSR and rendering the real icon would guarantee a hydration misma
 
 **Verified** by rendering the real page HTML with `data-theme="dark"` and a self-contained
 CSS inline: background `#0b0b0c`, light text, correct rules and muted labels.
+
+### 2026-08-25 — Phase 12 complete
+
+22 tests across `tags`, `group`, `rate-limit`, and the contact schema, plus a GitHub Actions
+workflow running typecheck → lint (`--max-warnings 0`) → tests → build on every push and PR.
+
+**CI is given no secrets, deliberately.** Nothing in the build may read the database or mail
+config, so if that step ever starts needing one, the coupling has been reintroduced and
+should be fixed rather than papered over. That property is why it holds: `DATABASE_URL` is
+optional in the env schema and asserted at point of use, the db client is lazily
+constructed, and no route reads the database at build time.
+
+**The suite immediately earned its keep** — a test asserting email normalisation failed on
+the first run and turned out to be a live production bug (ERRORS **E23**): `z.email().trim()`
+validates before it transforms, so any address pasted with a stray space was rejected as
+invalid. Confirmed against production, then fixed. The route also had its own copy of the
+schema, so the test would have proved nothing about the real endpoint; the schema is now
+extracted and imported by both.
+
+Several tests are written as regression guards for specific past incidents — the honeypot
+must *pass* validation (E13), field errors must be plain strings (E1), and the lossy
+`slugToLabel` round-trip is asserted as lossy to document why the database stores both tags
+and tag_slugs.
 
 ## Phase completion checklist
 

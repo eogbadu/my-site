@@ -507,6 +507,35 @@ can detect the error.
 
 ---
 
+### ✅ E23 — Emails with a stray space were rejected as invalid *(found by a test, confirmed live)*
+`z.email().trim().toLowerCase()` reads as "validate an email, trimmed and lowercased". It
+does the opposite: **zod validates first and transforms second**, so the raw value —
+whitespace included — is what gets checked.
+
+A pasted address with a leading or trailing space is extremely common, and it was being
+rejected. Confirmed against production before fixing:
+
+```
+POST https://www.ekeleogbadu.io/api/contact   email: " ada@example.com "
+→ {"ok":false,"fieldErrors":{"email":["Please use a valid email address."]}}  [400]
+```
+
+So a real visitor who pasted their address with a trailing space was told it was invalid.
+
+**Fix:** normalise first, then validate —
+`z.string().trim().toLowerCase().pipe(z.email(…).max(254))`.
+
+**How it was found:** a Phase 12 test asserting the schema normalises whitespace. It was
+written to document intended behaviour and immediately failed, which is the whole argument
+for the test suite — this bug had shipped, survived a hand-review of the same file, and was
+invisible until something asserted the behaviour.
+
+**Also fixed here:** the route had its own copy of the schema, so a test against a separate
+copy would have proved nothing. `src/lib/validation/contact.ts` is now the single source and
+the route imports it.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -531,6 +560,9 @@ can detect the error.
 - **Client components cannot export `metadata`.** Use a route `layout.tsx` for that segment.
 - **Never write alt text from a filename.** Open the image (E18).
 - **Never write an abstract, citation, or author list without reading the paper** (E21).
+- **Zod validates before it transforms.** `.trim()` after `.email()` does not help; pipe the
+  normalisation in front (E23).
+- **A test asserting a duplicated schema proves nothing.** Extract the schema first (E23).
 - **A huge PNG is usually badly encoded, not oversized.** Check dimensions before assuming
   a resize is the fix (E18).
 - **`notFound()` under `generateStaticParams` yields a soft 404 (HTTP 200)** unless
