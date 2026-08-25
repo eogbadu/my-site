@@ -76,7 +76,7 @@ export default function ContactPage() {
     const messages = fieldErrors[field];
     if (!messages?.length) return null;
     return (
-      <p id={errorId(field)} className="mt-1 text-sm text-red-600 dark:text-red-400">
+      <p id={errorId(field)} className="mt-1 text-sm text-danger">
         {messages[0]}
       </p>
     );
@@ -84,7 +84,7 @@ export default function ContactPage() {
 
   function borderFor(field: FieldName) {
     return fieldErrors[field]?.length
-      ? "border-red-500 dark:border-red-500"
+      ? "border-danger"
       : "border-rule";
   }
 
@@ -165,13 +165,13 @@ export default function ContactPage() {
         </div>
 
         {formError && (
-          <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+          <p role="alert" className="text-sm text-danger">
             {formError}
           </p>
         )}
 
         {status === "success" && (
-          <p role="status" className="text-sm text-green-700 dark:text-green-400">
+          <p role="status" className="text-sm text-success">
             Thanks! Your message was sent.
           </p>
         )}

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 
+import ThemeToggle from "@/components/ThemeToggle";
+
 import { siteConfig } from "@/config/site";
 
 export default function Navbar() {
@@ -38,8 +40,9 @@ export default function Navbar() {
           {siteConfig.shortName}
         </Link>
 
+        <div className="flex items-center gap-1">
         {/* Desktop nav */}
-        <ul className="hidden md:flex items-center gap-7 text-[0.9rem]">
+        <ul className="hidden md:flex items-center gap-7 text-[0.9rem] mr-4">
           {links.map((l) => (
             <li key={l.href}>
               <Link
@@ -51,6 +54,8 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
+
+        <ThemeToggle />
 
         {/* Mobile menu button */}
         <button
@@ -65,6 +70,7 @@ export default function Navbar() {
           {/* lucide icons set aria-hidden themselves; the button carries the label */}
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
+        </div>
       </nav>
 
       {/* Mobile panel */}

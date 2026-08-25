@@ -18,10 +18,24 @@
   --rule: #e6e3dd;
   --accent: #0e7490;
   --accent-soft: #ecfeff;
+  --danger: #b91c1c;
+  --success: #15803d;
 }
 
+/*
+ * Three-state theming: light, dark, and system.
+ *
+ * The dark values are declared twice on purpose:
+ *   1. under prefers-color-scheme, guarded by :not([data-theme="light"]) so an
+ *      explicit light choice still wins on a dark OS
+ *   2. under [data-theme="dark"] so an explicit dark choice wins on a light OS
+ *
+ * Because every component styles itself with tokens (bg-paper, text-ink-muted)
+ * rather than `dark:` variants, redefining these properties re-themes the entire
+ * site — no component markup changes at all.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #0b0b0c;
     --surface: #141416;
     --ink: #ededec;
@@ -30,7 +44,22 @@
     --rule: #26262a;
     --accent: #22d3ee;
     --accent-soft: #0d2b33;
+    --danger: #f87171;
+    --success: #4ade80;
   }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0b0b0c;
+  --surface: #141416;
+  --ink: #ededec;
+  --ink-muted: #a1a1a6;
+  --ink-faint: #74747c;
+  --rule: #26262a;
+  --accent: #22d3ee;
+  --accent-soft: #0d2b33;
+  --danger: #f87171;
+  --success: #4ade80;
 }
 
 @theme inline {
@@ -42,6 +71,8 @@
   --color-rule: var(--rule);
   --color-accent: var(--accent);
   --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
 
   /* Defined by next/font in src/app/layout.tsx. */
   --font-sans: var(--font-geist-sans);

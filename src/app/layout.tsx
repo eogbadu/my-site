@@ -86,7 +86,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable}`}>
+    <html
+      lang="en"
+      // The inline script below mutates this element before React hydrates.
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${displaySerif.variable}`}
+    >
+      <head>
+        {/*
+          Render-blocking on purpose: it must run before first paint, or every
+          dark-mode visitor sees a white flash. Kept tiny and wrapped in try/catch
+          so a disabled-storage browser degrades to system preference rather than
+          throwing before the page renders.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');var d=document.documentElement;if(t==='dark'||t==='light'){d.setAttribute('data-theme',t);d.style.colorScheme=t}else{d.style.colorScheme='light dark'}}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-screen font-sans antialiased bg-paper text-ink">
         {/*
           Skip link: the first thing a keyboard or screen-reader user reaches, so

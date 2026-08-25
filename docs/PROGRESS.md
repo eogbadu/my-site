@@ -11,7 +11,7 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 2 | Config, styling, build hygiene | ✅ | `143d5fc` | Fixed E4–E9; lint now fully clean |
 | 3 | `siteConfig` + full SEO pass | ✅ | `8bf9ca4` | Placeholder URLs (H9) still pending — deferred to Phase 4 |
 | 4 | Accessibility + images | ✅ | `a2d9b87` | Images compressed in-repo; H8 no longer needed |
-| 5 | Dark mode toggle | ⬜ | — | **Requires Phase 2 first** (unlayered `body{}` fix) |
+| 5 | Dark mode toggle | ✅ | `e2f30c7` | Token-driven; zero `dark:` variants remain |
 | 6 | De-client `/about` + `/projects/[slug]` | ✅ | `36d382d` | Also fixed a pre-existing soft 404 (E19) |
 | 7 | Database foundation | ⬜ | — | Needs H2, H3. **Branch + Preview** |
 | 8 | Auth + admin shell | ⬜ | — | Needs H4, H5. **Branch + Preview** |
@@ -209,6 +209,26 @@ academic credibility at conferences — and by an IEEE RO-MAN talk two days out.
 - **Favicon** — serif EO monogram replacing the create-next-app default. Verified live;
   browsers cache favicons aggressively, so a hard refresh or incognito window is needed to
   see the change.
+
+### 2026-08-25 — Phase 5 complete
+
+Three-state theme (light / dark / system) on `data-theme`, with the dark token block
+declared twice on purpose: under `prefers-color-scheme` guarded by
+`:not([data-theme="light"])` so an explicit light choice wins on a dark OS, and under
+`[data-theme="dark"]` so an explicit dark choice wins on a light OS.
+
+The Phase-3 token work paid off here: because components style themselves with `bg-paper`
+/ `text-ink-muted` rather than `dark:` variants, re-theming is purely a matter of
+redefining custom properties. **Zero `dark:` variants remain in any component** — the last
+four (semantic red/green on the contact form) became `--danger` / `--success` tokens.
+
+Anti-flash script is inline and render-blocking in `<head>`, wrapped in try/catch so a
+storage-disabled browser degrades to system preference instead of throwing before paint.
+`ThemeToggle` renders a fixed-size placeholder until mounted, since the stored theme is
+unknown during SSR and rendering the real icon would guarantee a hydration mismatch.
+
+**Verified** by rendering the real page HTML with `data-theme="dark"` and a self-contained
+CSS inline: background `#0b0b0c`, light text, correct rules and muted labels.
 
 ## Phase completion checklist
 
