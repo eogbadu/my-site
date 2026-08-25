@@ -190,6 +190,26 @@ finally have a purpose as the ResumeTailor gallery.
 lint *error*, not a warning); added project pages to the sitemap; **unfeatured FSR Release
 Planner** so `/` shows 3 cards and `/projects` shows 4 — they were identical before.
 
+### 2026-08-25 — Content, design, and conference readiness
+
+Out of phase order, driven by the user's brief that the site serves recruiters **and**
+academic credibility at conferences — and by an IEEE RO-MAN talk two days out.
+
+- **Résumé** rebuilt from the June 2026 docx (Lead AI/ML Engineer; Prescient Edge, Navy, and
+  entrepreneurial roles the site never showed). `public/resume.pdf` was still the **May 2025**
+  file; regenerated from the docx via LibreOffice. Master's thesis added under the M.S. entry.
+- **Research** corrected — see ERRORS **E21**. Ask-to-Act now carries its real three-author
+  list, the real abstract, and the camera-ready PDF, plus a "Presenting August 2026" badge
+  via a new optional `note` field on `Publication`.
+- **SCOUT++** card rebuilt from the project's own release material (example-task flow), with
+  a three-image gallery. The previous image was stock art of a literal toolbox.
+- **TimeSense** card composited from three real demo-video frames; demo video re-encoded
+  6.3 MB → 2.7 MB and wired into the detail page with `preload="none"`.
+- **Design pass** — editorial identity, token system, serif display face. See DECISIONS D11.
+- **Favicon** — serif EO monogram replacing the create-next-app default. Verified live;
+  browsers cache favicons aggressively, so a hard refresh or incognito window is needed to
+  see the change.
+
 ## Phase completion checklist
 
 Before marking a phase ✅:

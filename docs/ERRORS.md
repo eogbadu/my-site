@@ -480,6 +480,33 @@ the asset hashes. Both incidents cost real time to a stale process.
 
 ---
 
+### ✅ E21 — I invented a paper abstract and dropped two co-authors
+Self-inflicted, and the more serious of the two.
+
+When replacing a placeholder publication entry, I wrote the Ask-to-Act entry from the title
+alone. Two things were wrong:
+
+1. **Authors listed as "Ekele Ogbadu" alone.** The paper is by **Ekele A. Ogbadu** (UMBC),
+   **Stephanie Lukin** (DEVCOM Army Research Laboratory), and **Cynthia Matuszek** (UMBC).
+   Omitting co-authors on a public research page is a credit problem, not a typo — and it
+   would have been visible to exactly the people who know the work.
+2. **The abstract was fabricated.** I wrote plausible-sounding prose ("a robot that acts
+   confidently is more dangerous than one that asks") and presented it as the paper's
+   abstract. It was never in the paper.
+
+**Fixed** by reading the camera-ready PDF: real author list, real abstract including the
+reported figures (text-only 0.8225 → 0.8308 accuracy while asking in 0.2350 of episodes;
+multimodal 0.8503 → 0.8545 while asking in 0.1277), and the PDF itself now hosted and linked.
+
+**This is the same failure as E18's alt text**, one severity higher: generating confident
+text about an artifact I had not opened. Publication metadata, alt text, and citations are
+all cases where a plausible guess is worse than an empty field, because nothing downstream
+can detect the error.
+
+**Rule: never write metadata describing an artifact without opening the artifact.**
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -503,6 +530,7 @@ the asset hashes. Both incidents cost real time to a stale process.
   its credentials (E14).
 - **Client components cannot export `metadata`.** Use a route `layout.tsx` for that segment.
 - **Never write alt text from a filename.** Open the image (E18).
+- **Never write an abstract, citation, or author list without reading the paper** (E21).
 - **A huge PNG is usually badly encoded, not oversized.** Check dimensions before assuming
   a resize is the fix (E18).
 - **`notFound()` under `generateStaticParams` yields a soft 404 (HTTP 200)** unless
