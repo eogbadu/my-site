@@ -22,13 +22,16 @@ export const publications: Publication[] = [
     slug: "ask-to-act",
     title:
       "Ask-to-Act: Learning When Robots Should Clarify Ambiguous Grounded Instructions",
-    authors: ["Ekele Ogbadu"],
+    authors: ["Ekele A. Ogbadu", "Stephanie Lukin", "Cynthia Matuszek"],
     venue: "IEEE RO-MAN 2026",
     year: 2026,
     note: "Presenting August 2026",
-    tags: ["HRI", "Grounded Language", "Ambiguity"],
+    tags: ["HRI", "Grounded Language", "Ambiguity", "Uncertainty"],
     abstract:
-      "When a natural-language instruction is ambiguous, a robot that acts confidently is more dangerous than one that asks. This work studies when a robot should request clarification rather than commit to an interpretation of a grounded instruction.",
+      "Robots that follow natural-language instructions must decide not only what action to execute, but also whether the current evidence is sufficient to act at all. We present Ask-to-Act, a framework for grounded robot instruction following that treats clarification as a cost-sensitive decision under uncertainty. The system either executes immediately or requests one minimal grounding cue before acting. We evaluate Ask-to-Act on SCOUT++, a grounded HRI benchmark with command-label-image examples from situated human-robot interaction. In a text-only setting, Ask-to-Act improves grounded action prediction from 0.8225 to 0.8308 accuracy while asking in 0.2350 of episodes. In a multimodal setting, command-time visual grounding improves the always-act baseline to 0.8503 accuracy, and Ask-to-Act further improves accuracy to 0.8545 while asking in 0.1277 of episodes. These results show that Ask-to-Act can adapt its interaction rate to the available evidence.",
+    links: {
+      pdf: "/papers/ask-to-act-roman-2026.pdf",
+    },
     featured: true,
   },
 ];

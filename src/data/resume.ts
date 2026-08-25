@@ -124,6 +124,9 @@ export const resume: ResumeData = {
           title: "M.S., Computer Science",
           org: "University of Maryland, Baltimore County",
           period: "May 2024",
+          bullets: [
+            "Thesis: “Statistical Language and Neural Network Models: Classifying Human Instructions in Situated Robot Command.” Advised by Prof. Cynthia Matuszek.",
+          ],
         },
         {
           title: "B.S., Computer Science (Data Science concentration)",
