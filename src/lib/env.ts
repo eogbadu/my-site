@@ -21,6 +21,14 @@ const envSchema = z.object({
   SMTP_USER: z.string().min(1).optional(),
   SMTP_PASS: z.string().min(1).optional(),
   MAIL_TO: z.email().optional(),
+
+  /**
+   * Injected by the Vercel-Neon integration. Optional in the schema so that
+   * builds, CI, and every non-blog route keep working without it — the blog
+   * queries assert it at the point of use instead, where the failure is
+   * actionable.
+   */
+  DATABASE_URL: z.string().min(1).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -45,6 +53,15 @@ export const env: Env = loadEnv();
  * never depend on them. The contact route calls this to assert them at the point
  * of use, where a clear failure is actually actionable.
  */
+export function requireDatabaseUrl(): string {
+  if (!env.DATABASE_URL) {
+    throw new Error(
+      "DATABASE_URL is not set. Provision Neon via the Vercel integration, then run `vercel env pull .env.local`."
+    );
+  }
+  return env.DATABASE_URL;
+}
+
 export function requireSmtpCredentials(): { user: string; pass: string } {
   if (!env.SMTP_USER || !env.SMTP_PASS) {
     throw new Error("SMTP_USER and SMTP_PASS must both be set to send mail.");
