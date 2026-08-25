@@ -18,9 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Node 24 ships npm 11, matching the npm major that generates the lockfile
+      # locally. On Node 20 (npm 10) `npm ci` failed with "Missing: esbuild@0.28.2
+      # from lock file", because the two majors hoist transitive dependencies
+      # differently — npm 11 records esbuild nested under tsx, npm 10 expects it
+      # at the top level. Keeping the majors aligned keeps the lockfile portable.
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - run: npm ci
