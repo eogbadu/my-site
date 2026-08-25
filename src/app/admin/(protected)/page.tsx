@@ -3,7 +3,7 @@ import Link from "next/link";
 import DeleteButton from "@/components/admin/DeleteButton";
 import { getAllPostsForAdmin } from "@/db/queries";
 import { requireAdmin } from "@/lib/admin";
-import { deletePost } from "./actions";
+import { deletePost } from "@/app/admin/actions";
 
 export const dynamic = "force-dynamic";
 

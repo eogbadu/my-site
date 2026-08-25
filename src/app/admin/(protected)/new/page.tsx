@@ -1,6 +1,6 @@
 import PostForm from "@/components/admin/PostForm";
 import { requireAdmin } from "@/lib/admin";
-import { createPost } from "../actions";
+import { createPost } from "@/app/admin/actions";
 
 export const dynamic = "force-dynamic";
 

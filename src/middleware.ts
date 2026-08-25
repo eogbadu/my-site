@@ -15,5 +15,16 @@ import { authConfig } from "@/auth.config";
 export const { auth: middleware } = NextAuth(authConfig);
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  /**
+   * Everything under /admin EXCEPT the login page itself.
+   *
+   * A plain "/admin/:path*" also matches /admin/login, so an unauthenticated
+   * visitor was redirected to the login page, which the middleware then
+   * redirected again — an infinite loop that curl reports as
+   * "Maximum (50) redirects followed".
+   *
+   * The negative lookahead excludes it while still covering /admin and every
+   * other nested route.
+   */
+  matcher: ["/admin", "/admin/((?!login).*)"],
 };

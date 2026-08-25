@@ -8,6 +8,14 @@ import { auth, signOut } from "@/auth";
  * Defense in depth: guarantees no admin page renders for a non-admin even if the
  * middleware matcher is misconfigured or bypassed. The real boundary is still
  * requireAdmin() inside each server action.
+ *
+ * Lives in a (protected) route group so it wraps only the guarded pages. The
+ * login page sits outside the group and therefore does not inherit this guard —
+ * previously it did, and redirected itself to itself in an infinite loop. A
+ * nested layout does not replace a parent layout, it nests inside it, so giving
+ * login its own pass-through layout did not help.
+ *
+ * Route groups do not affect URLs: these pages are still /admin, /admin/new, etc.
  */
 export const metadata: Metadata = {
   title: "Admin",

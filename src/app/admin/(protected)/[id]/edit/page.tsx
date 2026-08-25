@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import PostForm from "@/components/admin/PostForm";
 import { getPostById } from "@/db/queries";
 import { requireAdmin } from "@/lib/admin";
-import { updatePost } from "../../actions";
+import { updatePost } from "@/app/admin/actions";
 
 export const dynamic = "force-dynamic";
 
