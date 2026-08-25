@@ -29,6 +29,13 @@ const envSchema = z.object({
    * actionable.
    */
   DATABASE_URL: z.string().min(1).optional(),
+
+  // --- Auth (see docs/RUNBOOK.md H4/H5) ---
+  AUTH_SECRET: z.string().min(1).optional(),
+  AUTH_GITHUB_ID: z.string().min(1).optional(),
+  AUTH_GITHUB_SECRET: z.string().min(1).optional(),
+  /** Numeric GitHub user id, never the login — logins can be renamed and reclaimed. */
+  ADMIN_GITHUB_ID: z.string().regex(/^\d+$/).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
