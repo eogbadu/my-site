@@ -51,6 +51,8 @@ export interface Publication {
     video?: string; // talk/demo video
   };
   abstract?: string; // optional short summary
+  /** Short status line, e.g. "Presenting 27 Aug 2026". Rendered as an accent badge. */
+  note?: string;
   featured?: boolean; // for highlighting on home later
 }
 

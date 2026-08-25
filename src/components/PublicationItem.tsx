@@ -30,6 +30,13 @@ export default function PublicationItem({ pub: p, variant = "full" }: Props) {
       <p className="mt-2 text-sm text-ink-muted">{p.authors.join(", ")}</p>
       <p className="text-sm italic text-ink-faint">{p.venue}</p>
 
+      {p.note && (
+        <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-accent-soft px-2.5 py-1 text-xs font-medium text-accent">
+          <span aria-hidden="true">●</span>
+          {p.note}
+        </p>
+      )}
+
       {p.abstract && (
         <p
           className={`mt-3 text-sm leading-relaxed text-ink-muted max-w-[68ch] ${

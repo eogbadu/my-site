@@ -23,8 +23,9 @@ export const publications: Publication[] = [
     title:
       "Ask-to-Act: Learning When Robots Should Clarify Ambiguous Grounded Instructions",
     authors: ["Ekele Ogbadu"],
-    venue: "IEEE RO-MAN (accepted)",
+    venue: "IEEE RO-MAN 2026",
     year: 2026,
+    note: "Presenting August 2026",
     tags: ["HRI", "Grounded Language", "Ambiguity"],
     abstract:
       "When a natural-language instruction is ambiguous, a robot that acts confidently is more dangerous than one that asks. This work studies when a robot should request clarification rather than commit to an interpretation of a grounded instruction.",
