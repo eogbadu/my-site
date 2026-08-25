@@ -13,10 +13,10 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 4 | Accessibility + images | ✅ | `a2d9b87` | Images compressed in-repo; H8 no longer needed |
 | 5 | Dark mode toggle | ✅ | `e2f30c7` | Token-driven; zero `dark:` variants remain |
 | 6 | De-client `/about` + `/projects/[slug]` | ✅ | `36d382d` | Also fixed a pre-existing soft 404 (E19) |
-| 7 | Database foundation | ✅ code | `161e17d` | On `feat/db-blog-admin`. Needs H2/H3 to run |
-| 8 | Auth + admin shell | ✅ code | `39675c3` | On branch. Needs H4/H5 to sign in |
-| 9 | Admin CRUD + MDX renderer | ✅ code | `80f0aee` | On branch. MDX guard verified directly |
-| 10 | Blog cutover (riskiest) | 🟡 code / ⛔ **DO NOT MERGE** | `pending` | Unverifiable without a database — see below |
+| 7 | Database foundation | ✅ **live** | `161e17d` | Neon provisioned, migrated, seeded |
+| 8 | Auth + admin shell | ✅ code / ⏸️ | `39675c3` | Deployed; needs GitHub OAuth env to sign in (H4/H5) |
+| 9 | Admin CRUD + MDX renderer | ✅ code / ⏸️ | `80f0aee` | Deployed; unreachable until auth env is set |
+| 10 | Blog cutover (riskiest) | ✅ **live** | `08e33e9` | Blog serves from Neon; real 404s verified |
 | 11 | View counts + analytics | ⬜ | — | Needs H7 |
 | 12 | Tests, CI, docs | ✅ | `0d6f8e1` | 22 tests; CI needs no secrets. Found E23 |
 
@@ -283,6 +283,30 @@ Several tests are written as regression guards for specific past incidents — t
 must *pass* validation (E13), field errors must be plain strings (E1), and the lossy
 `slugToLabel` round-trip is asserted as lossy to document why the database stores both tags
 and tag_slugs.
+
+### 2026-08-26 — Phases 7–10 shipped
+
+Neon provisioned via the Vercel Marketplace, migrated, seeded, and the cutover merged and
+deployed. **The blog now serves from the database.** Verified in production:
+`/blog/hello-world` 200 with correct content, `/blog` and the tag pages 200, and missing
+posts and unknown tags returning **real 404s**.
+
+Running against a real database immediately exposed three bugs that no amount of local
+reasoning had caught — see ERRORS **E24**, **E25**, **E26**. The first two compounded:
+`loading.tsx` made every route stream, which both turned `notFound()` into a soft 404 *and*
+masked a 500 as a success. Removing it surfaced a `Date`-serialisation bug that had been
+invisible.
+
+Two CI failures also worth recording, both lockfile-related and neither affecting
+production:
+1. `npm ci` wanted platform binaries a macOS-generated lockfile omitted.
+2. The real cause was subtler — npm 11 and npm 10 **hoist transitive dependencies
+   differently**, so a lockfile written by one is not valid for the other. CI now runs
+   Node 24 (npm 11) to match. Green.
+
+**Still outstanding:** the admin dashboard is deployed but unreachable until the GitHub
+OAuth apps and auth env vars exist (RUNBOOK H4/H5). `/admin` correctly 307s to its login
+page in the meantime.
 
 ## Phase completion checklist
 

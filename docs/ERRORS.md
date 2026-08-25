@@ -606,6 +606,29 @@ the route imports it.
 
 ---
 
+### ✅ E27 — npm 10 and npm 11 hoist transitive deps differently, breaking `npm ci`
+CI failed twice on the lockfile. The first message —
+`Missing: @esbuild/win32-x64@0.28.2 from lock file` — looked like a macOS-generated
+lockfile omitting other platforms' optional binaries. Regenerating did not fix it; the next
+run said `Missing: esbuild@0.28.2` outright.
+
+**Actual cause:** npm 11 (local, Node 25) records `esbuild@0.28.2` at
+`node_modules/tsx/node_modules/esbuild`, while npm 10 (CI, Node 20) expects it hoisted to
+`node_modules/esbuild`. The lockfile was valid for one major and not the other, and `npm ci`
+refuses any mismatch.
+
+**Fix:** CI runs Node 24, which ships npm 11 and matches whatever writes the lockfile
+locally. Within `engines.node: >=20`.
+
+**Lesson:** "missing from lock file" can mean *recorded at a different path*, not absent.
+Check where the package sits in the tree before regenerating. And a lockfile is only
+portable across npm majors that agree on hoisting — pin the major in CI.
+
+Production was never affected: Vercel builds with its own resolution and had already
+deployed successfully.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
