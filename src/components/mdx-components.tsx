@@ -14,14 +14,22 @@ import type { ComponentPropsWithoutRef } from "react";
  * can be deleted with @next/mdx without taking the styling with it.
  */
 export const mdxComponents: MDXComponents = {
+  /**
+   * A `#` heading in a post body renders as <h2>, not <h1>.
+   *
+   * The page already renders the post title as the sole <h1>, so a body starting
+   * with `# Title` produced two <h1>s on the same document — an accessibility and
+   * SEO problem that would recur on every post. Demoting here fixes it for all
+   * content, present and future, without editing any post.
+   */
   h1: (props: ComponentPropsWithoutRef<"h1">) => (
-    <h1 className="text-3xl font-bold mt-2 mb-3" {...props} />
+    <h2 className="font-display text-2xl tracking-[-0.01em] mt-8 mb-3" {...props} />
   ),
   h2: (props: ComponentPropsWithoutRef<"h2">) => (
-    <h2 className="text-2xl font-semibold mt-8 mb-2" {...props} />
+    <h2 className="font-display text-2xl tracking-[-0.01em] mt-8 mb-3" {...props} />
   ),
   h3: (props: ComponentPropsWithoutRef<"h3">) => (
-    <h3 className="text-xl font-semibold mt-6 mb-2" {...props} />
+    <h3 className="font-display text-xl tracking-[-0.01em] mt-6 mb-2" {...props} />
   ),
   p: (props: ComponentPropsWithoutRef<"p">) => (
     <p className="leading-7 my-4 text-ink-muted" {...props} />

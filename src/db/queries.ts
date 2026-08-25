@@ -18,15 +18,42 @@ import { posts } from "./schema";
  */
 const HOUR = 3600;
 
+/**
+ * `publishedAt` is an ISO string, not a Date.
+ *
+ * unstable_cache serialises its return value to JSON, so a Date survives the
+ * first call and comes back as a string on every cache hit. Typing it as Date
+ * was a lie that only surfaced as `publishedAt.toISOString is not a function`
+ * once a real database was attached. Returning a string makes the serialisation
+ * boundary explicit and the failure impossible.
+ */
 export type PostListItem = {
   slug: string;
   title: string;
   excerpt: string | null;
   tags: string[];
   tagSlugs: string[];
-  publishedAt: Date | null;
+  publishedAt: string | null;
   viewCount: number;
 };
+
+export type PostDetail = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  body: string;
+  tags: string[];
+  tagSlugs: string[];
+  publishedAt: string | null;
+  viewCount: number;
+};
+
+/** Normalises whatever the driver returns into an ISO string. */
+function iso(value: Date | string | null): string | null {
+  if (!value) return null;
+  return value instanceof Date ? value.toISOString() : value;
+}
 
 const listColumns = {
   slug: posts.slug,
@@ -39,25 +66,39 @@ const listColumns = {
 };
 
 export const getPublishedPosts = unstable_cache(
-  async (): Promise<PostListItem[]> =>
-    db
+  async (): Promise<PostListItem[]> => {
+    const rows = await db
       .select(listColumns)
       .from(posts)
       .where(eq(posts.status, "published"))
-      .orderBy(desc(posts.publishedAt)),
+      .orderBy(desc(posts.publishedAt));
+    return rows.map((r) => ({ ...r, publishedAt: iso(r.publishedAt) }));
+  },
   ["published-posts"],
   { revalidate: HOUR, tags: ["posts"] }
 );
 
 export const getPostBySlug = (slug: string) =>
   unstable_cache(
-    async () => {
+    async (): Promise<PostDetail | null> => {
       const rows = await db
         .select()
         .from(posts)
         .where(and(eq(posts.slug, slug), eq(posts.status, "published")))
         .limit(1);
-      return rows[0] ?? null;
+      const r = rows[0];
+      if (!r) return null;
+      return {
+        id: r.id,
+        slug: r.slug,
+        title: r.title,
+        excerpt: r.excerpt,
+        body: r.body,
+        tags: r.tags,
+        tagSlugs: r.tagSlugs,
+        publishedAt: iso(r.publishedAt),
+        viewCount: r.viewCount,
+      };
     },
     ["post", slug],
     { revalidate: HOUR, tags: ["posts", `post:${slug}`] }
@@ -65,8 +106,8 @@ export const getPostBySlug = (slug: string) =>
 
 export const getPostsByTagSlug = (tagSlug: string) =>
   unstable_cache(
-    async (): Promise<PostListItem[]> =>
-      db
+    async (): Promise<PostListItem[]> => {
+      const rows = await db
         .select(listColumns)
         .from(posts)
         .where(
@@ -76,7 +117,9 @@ export const getPostsByTagSlug = (tagSlug: string) =>
             sql`${posts.tagSlugs} @> ARRAY[${tagSlug}]::text[]`
           )
         )
-        .orderBy(desc(posts.publishedAt)),
+        .orderBy(desc(posts.publishedAt));
+      return rows.map((r) => ({ ...r, publishedAt: iso(r.publishedAt) }));
+    },
     ["posts-by-tag", tagSlug],
     { revalidate: HOUR, tags: ["posts"] }
   )();

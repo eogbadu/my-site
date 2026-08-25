@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     postRoutes = published.map((p) => ({
       url: absoluteUrl(`/blog/${p.slug}`),
-      lastModified: p.publishedAt ?? undefined,
+      lastModified: p.publishedAt ? new Date(p.publishedAt) : undefined,
       changeFrequency: "yearly",
       priority: 0.6,
     }));

@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.excerpt ?? post.title,
     path: `/blog/${post.slug}`,
     type: "article",
-    publishedTime: post.publishedAt?.toISOString(),
+    publishedTime: post.publishedAt ?? undefined,
   });
 }
 
@@ -66,12 +66,15 @@ export default async function BlogPostPage({ params }: Props) {
         </h1>
 
         <p className="text-sm text-ink-faint">
-          <time dateTime={post.publishedAt?.toISOString()}>
-            {post.publishedAt?.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+          <time dateTime={post.publishedAt ?? undefined}>
+            {post.publishedAt
+              ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  timeZone: "UTC",
+                })
+              : null}
           </time>
           {" · "}
           {readingTime(post.body)} min read

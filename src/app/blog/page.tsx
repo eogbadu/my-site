@@ -54,7 +54,7 @@ export default async function BlogIndexPage() {
                   </Link>
                 </h2>
                 <span className="numeral shrink-0">
-                  {p.publishedAt?.toISOString().slice(0, 10)}
+                  {p.publishedAt?.slice(0, 10)}
                 </span>
               </div>
 

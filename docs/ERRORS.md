@@ -531,6 +531,55 @@ on a path you did not anticipate. In Next, *every* route module is imported at b
 
 ---
 
+### ✅ E24 — `loading.tsx` silently turned every `notFound()` into a soft 404
+The open question from Phase 10, settled against a real database: `/blog/definitely-not-a-post`
+returned **HTTP 200** while rendering 404 content.
+
+**Cause:** a `loading.tsx` creates a Suspense boundary, so Next begins streaming the
+response — and the status code is sent with the first chunk. By the time `notFound()` runs,
+200 is already on the wire and cannot be changed.
+
+The root `src/app/loading.tsx` added in Phase 3 applied this to **every route on the site**,
+so it was not specific to the blog. Removing it restored real 404s.
+
+**Trade-off taken:** no `loading.tsx` anywhere. It was cosmetic — every non-blog page is
+static and the blog queries are cached — and correct status codes matter far more than a
+skeleton nobody sees. Anything added back must not sit above a route that calls
+`notFound()`.
+
+---
+
+### ✅ E25 — `unstable_cache` serialises Dates to strings, and the types said otherwise
+Exposed the moment the streaming mask from E24 was removed:
+
+```
+TypeError: c.publishedAt?.toISOString is not a function
+```
+
+`unstable_cache` JSON-serialises its return value, so a `Date` survives the first
+(uncached) call and comes back as a **string** on every cache hit. The query types declared
+`Date | null`, which was true exactly once and false thereafter — the worst kind of type
+error, since it typechecks and passes a first run.
+
+**Fix:** the cached queries now return `publishedAt` as an ISO **string**, normalised by an
+`iso()` helper, with consumers formatting explicitly. Making the serialisation boundary
+visible in the types means it cannot silently lie again.
+
+**Both bugs were hidden by the same thing.** Streaming rendered the error boundary with a
+200, so a broken post page looked like a working one. Removing `loading.tsx` surfaced a
+500 that had been there all along.
+
+---
+
+### ✅ E26 — Post bodies produced a second `<h1>`
+The page renders the post title as `<h1>`, and the seeded body opened with `# Hello, World`,
+which the MDX map also rendered as `<h1>` — two `<h1>`s per page, on every post.
+
+**Fix:** the MDX component map now renders `h1` as `<h2>`. Fixing it in the map rather than
+editing the post means no future body can reintroduce it. Verified: exactly one `<h1>`.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
