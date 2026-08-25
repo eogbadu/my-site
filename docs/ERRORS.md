@@ -507,6 +507,30 @@ can detect the error.
 
 ---
 
+### ✅ E22 — Eager database connection broke `next build` *(self-inflicted, caught in Phase 9)*
+`src/db/index.ts` resolved `DATABASE_URL` at module scope:
+
+```ts
+export const db = drizzle(neon(requireDatabaseUrl()), { schema });
+```
+
+Harmless while nothing imported it. The moment the admin routes did, `next build`
+failed with `Failed to collect page data for /admin/[id]/edit`, because Next imports every
+route module during page-data collection — and that import threw.
+
+This destroyed the exact property Phase 7 was designed around: **a build must never require
+a database.** Without it, a Neon outage or a missing env var can fail a deploy that has
+nothing to do with the database, and CI cannot build without secrets.
+
+**Fix:** `db` is now a `Proxy` that constructs the client on first property access, so
+importing the module is free and only an actual query needs the URL. Verified: the
+production build succeeds with `DATABASE_URL` unset.
+
+**Lesson:** a module-scope side effect that reads config is fine until something imports it
+on a path you did not anticipate. In Next, *every* route module is imported at build time.
+
+---
+
 ## Gotchas worth remembering
 
 - **Zod strips unknown keys by default.** An extra field in the request body causes no
@@ -542,5 +566,7 @@ can detect the error.
   old build while every restart fails with EADDRINUSE (E20).
 - **Read the server log before theorising.** E20 announced itself in one line that went
   unread for half an hour.
+- **Next imports every route module during build.** Module-scope config reads therefore run
+  at build time, whether or not the route is used (E22).
 - **Internal `<a href="/...">` forces a full page reload.** Use `next/link`; eslint's
   `@next/next/no-html-link-for-pages` catches it.
