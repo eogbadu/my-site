@@ -15,6 +15,8 @@ export function revalidateBlog(slug?: string) {
   revalidateTag("posts");
   if (slug) revalidateTag(`post:${slug}`);
 
+  // The homepage carries a blog preview, so a publish has to refresh it too.
+  revalidatePath("/");
   revalidatePath("/blog");
   revalidatePath("/blog/tag");
   revalidatePath("/blog/[slug]", "page");

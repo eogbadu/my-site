@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import FeatureBlock from "@/components/FeatureBlock";
+import FeaturedPosts from "@/components/FeaturedPosts";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import FeaturedResearch from "@/components/FeaturedResearch";
 import SocialLinks from "@/components/SocialLinks";
@@ -13,6 +14,18 @@ import { projects } from "@/data/projects";
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
+
+/**
+ * Dynamic because the blog preview reads the database. As a static route this
+ * would be prerendered at build time, which would make `next build` depend on
+ * the database — the coupling avoided everywhere else, where a Neon outage would
+ * fail an unrelated deploy.
+ *
+ * Rendering per request costs little: the query is wrapped in unstable_cache, so
+ * steady-state traffic still makes no database calls. Only the Full Route Cache
+ * is given up. Same reasoning as /blog.
+ */
+export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   const flagship = projects.find((p) => p.featured);
@@ -94,6 +107,7 @@ export default function HomePage() {
       <div className="space-y-20 pt-16">
         {flagship && <FeatureBlock project={flagship} />}
         <FeaturedProjects excludeSlug={flagship?.slug} />
+        <FeaturedPosts limit={3} />
         <FeaturedResearch />
       </div>
     </>
