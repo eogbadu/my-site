@@ -29,7 +29,13 @@ export default function ProjectCard({ project: p, eager = false, index }: Props)
               alt={p.imageAlt ?? `${p.title} preview`}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition duration-500 group-hover:scale-[1.02]"
+              className={`transition duration-500 group-hover:scale-[1.02] ${
+                p.imageFit === "contain"
+                  ? // Logo art: sit it as a mark with breathing room rather than
+                    // cropping it to fill, which reads as a placeholder swatch.
+                    "object-contain p-6"
+                  : "object-cover"
+              }`}
               priority={eager}
             />
           </div>

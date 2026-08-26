@@ -51,6 +51,7 @@ The explainability work matters most to me. A recommendation you cannot interrog
     image: "/projects/resumetailor_3.webp",
     imageAlt:
       "ResumeTailor logo — a gold document icon with a person and a star, on black",
+    imageFit: "contain",
     featured: true,
     year: "2025",
     role: "Solo build",
@@ -125,6 +126,7 @@ The headline finding is a negative one. Adding synchronized visual input to GPT-
     tags: ["TypeScript", "Algorithms", "UX"],
     image: "/projects/fsrplanner.webp",
     imageAlt: "FSR ToolPlanner logo — a gold calendar and wrench icon on dark green",
+    imageFit: "contain",
     year: "2024—2025",
     role: "Senior Agile Engineer & Release Manager",
     status: "shipped",

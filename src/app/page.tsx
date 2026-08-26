@@ -2,24 +2,28 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+import FeatureBlock from "@/components/FeatureBlock";
 import FeaturedProjects from "@/components/FeaturedProjects";
 import FeaturedResearch from "@/components/FeaturedResearch";
 import SocialLinks from "@/components/SocialLinks";
 import Typewriter from "@/components/Typewriter";
 import { siteConfig } from "@/config/site";
+import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
 export default function HomePage() {
+  const flagship = projects.find((p) => p.featured);
+
   return (
     <>
-      <section className="pb-16 sm:pb-20">
-        <div className="grid items-center gap-10 md:grid-cols-[1.35fr_1fr]">
+      <section className="pb-12 sm:pb-16">
+        <div className="grid items-center gap-10 md:grid-cols-[1.4fr_0.85fr]">
           <div className="space-y-6">
             <p className="eyebrow">
-              {/* Reserves its line so the hero doesn't shift when the animation starts. */}
+              {/* Reserves its line so the hero doesn't shift when typing starts. */}
               <Typewriter
                 words={[...siteConfig.roles]}
                 typingSpeed={100}
@@ -59,24 +63,37 @@ export default function HomePage() {
             <SocialLinks />
           </div>
 
-          <div className="order-first md:order-last mx-auto w-44 sm:w-56 md:w-full md:max-w-[300px]">
-            <div className="relative aspect-square">
-              <div className="absolute -inset-3 rounded-full bg-accent/10 blur-2xl" />
+          {/*
+            Portrait, not an avatar: a 4:5 editorial crop rather than a circle with
+            a blur glow behind it. A round headshot beside a headline is the most
+            common personal-site layout there is, and it read as template.
+          */}
+          <div className="order-first md:order-last mx-auto w-40 sm:w-52 md:w-full md:max-w-[290px]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-rule">
               <Image
-                src={siteConfig.avatar}
+                src={siteConfig.portrait}
                 alt={siteConfig.name}
                 fill
-                sizes="(min-width: 768px) 300px, 14rem"
+                sizes="(min-width: 768px) 290px, 13rem"
                 priority
-                className="relative z-10 rounded-full object-cover ring-1 ring-rule"
+                className="object-cover"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <div className="space-y-20">
-        <FeaturedProjects />
+      {/* Hard signals, for the recruiter who reads one screen and the peer who
+          wants to know whether the research is real. */}
+      <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-rule py-4 text-xs text-ink-faint">
+        {siteConfig.credentials.map((c) => (
+          <li key={c}>{c}</li>
+        ))}
+      </ul>
+
+      <div className="space-y-20 pt-16">
+        {flagship && <FeatureBlock project={flagship} />}
+        <FeaturedProjects excludeSlug={flagship?.slug} />
         <FeaturedResearch />
       </div>
     </>

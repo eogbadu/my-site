@@ -2,15 +2,20 @@ import ProjectCard from "@/components/ProjectCard";
 import SectionHeader from "@/components/SectionHeader";
 import { projects } from "@/data/projects";
 
-export default function FeaturedProjects() {
-  const featured = projects.filter((p) => p.featured);
+export default function FeaturedProjects({
+  /** Slug already shown in the flagship feature block, to avoid repeating it. */
+  excludeSlug,
+}: {
+  excludeSlug?: string;
+} = {}) {
+  const featured = projects.filter((p) => p.featured && p.slug !== excludeSlug);
   if (featured.length === 0) return null;
 
   return (
     <section>
       <SectionHeader
         eyebrow="Selected work"
-        title="Projects"
+        title="More work"
         description="Things I have designed, built, and shipped."
         action={{ href: "/projects", label: "All projects" }}
       />

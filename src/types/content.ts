@@ -20,6 +20,11 @@ export interface Project {
   repo?: string; // GitHub link (optional)
   image?: string; // path under /public (optional), e.g., "/projects/resumetailor_3.webp"
   imageAlt?: string; // describes the image; falls back to the title if absent
+  /**
+   * "contain" for logo-style art, which looks cropped and cheap when forced to
+   * fill a 16:9 tile. Defaults to "cover" for screenshots and graphics.
+   */
+  imageFit?: "cover" | "contain";
   video?: string; // demo video under /public, e.g. "/video/timesense-demo.mp4"
   videoPoster?: string; // still shown before the video plays
   featured?: boolean; // highlight on homepage (optional)

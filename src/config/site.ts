@@ -63,8 +63,21 @@ export const siteConfig = {
     "UMBC",
   ],
 
+  /**
+   * Hard signals shown under the hero. Both audiences scan for these, and they
+   * are the difference between "portfolio" and "evidence".
+   */
+  credentials: [
+    "2 peer-reviewed papers",
+    "IEEE RO-MAN 2026",
+    "12+ years engineering",
+    "AWS ML Specialty",
+  ],
+
   resumePdf: "/resume.pdf",
   avatar: "/avatar.webp",
+  /** 4:5 editorial crop used in the homepage hero. */
+  portrait: "/portrait-muted.webp",
 
   nav: [
     { name: "Home", href: "/" },
