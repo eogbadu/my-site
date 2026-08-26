@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { siteConfig } from "@/config/site";
@@ -126,6 +129,17 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+
+        {/*
+          Cookieless, so no consent banner is required. Speed Insights reports
+          real-user Core Web Vitals, which is how the image and `priority` work
+          gets verified against actual visitors rather than a local Lighthouse run.
+
+          Both need enabling in the Vercel dashboard — installing the packages
+          alone does nothing. See docs/RUNBOOK.md H7.
+        */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

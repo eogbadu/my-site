@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import MdxContent from "@/components/MdxContent";
+import ViewCounter from "@/components/ViewCounter";
 import { getPostBySlug } from "@/db/queries";
 import { buildMetadata } from "@/lib/metadata";
 import { readingTime } from "@/lib/reading-time";
@@ -78,6 +79,8 @@ export default async function BlogPostPage({ params }: Props) {
           </time>
           {" · "}
           {readingTime(post.body)} min read
+          {" · "}
+          <ViewCounter slug={post.slug} initial={post.viewCount} />
         </p>
 
         {post.tags.length > 0 && (

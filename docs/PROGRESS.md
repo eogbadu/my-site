@@ -14,10 +14,10 @@ Legend: ⬜ not started · 🟡 in progress · ✅ done · ⏸️ blocked
 | 5 | Dark mode toggle | ✅ | `e2f30c7` | Token-driven; zero `dark:` variants remain |
 | 6 | De-client `/about` + `/projects/[slug]` | ✅ | `36d382d` | Also fixed a pre-existing soft 404 (E19) |
 | 7 | Database foundation | ✅ **live** | `161e17d` | Neon provisioned, migrated, seeded |
-| 8 | Auth + admin shell | ✅ code / ⏸️ | `39675c3` | Deployed; needs GitHub OAuth env to sign in (H4/H5) |
-| 9 | Admin CRUD + MDX renderer | ✅ code / ⏸️ | `80f0aee` | Deployed; unreachable until auth env is set |
+| 8 | Auth + admin shell | ✅ **live** | `39675c3` | OAuth app + env set; sign-in verified |
+| 9 | Admin CRUD + MDX renderer | ✅ **live** | `80f0aee` | Post created and published through the admin |
 | 10 | Blog cutover (riskiest) | ✅ **live** | `08e33e9` | Blog serves from Neon; real 404s verified |
-| 11 | View counts + analytics | ⬜ | — | Needs H7 |
+| 11 | View counts + analytics | ✅ | `bdbacf6` | Counting verified; analytics needs H7 toggled |
 | 12 | Tests, CI, docs | ✅ | `0d6f8e1` | 22 tests; CI needs no secrets. Found E23 |
 
 ## Current state
@@ -307,6 +307,41 @@ production:
 **Still outstanding:** the admin dashboard is deployed but unreachable until the GitHub
 OAuth apps and auth env vars exist (RUNBOOK H4/H5). `/admin` correctly 307s to its login
 page in the meantime.
+
+### 2026-08-26 — Phase 11 complete (all twelve phases done)
+
+View counting and analytics. Also corrects the table: phases 8 and 9 were still marked
+blocked, but the OAuth app and env vars are in place and a post has been created and
+published through the admin.
+
+**Counting** — `POST /api/posts/[slug]/views`, one atomic CTE: resolve the slug, insert
+into `post_views`, and add however many rows the insert actually created (1 for a new
+visitor, 0 for a repeat). One statement, one round trip, which is why the HTTP driver's
+lack of interactive transactions costs nothing.
+
+Two dedupe layers, both verified against the real database:
+
+| | |
+|---|---|
+| Same visitor, 4 requests | stays at **1** |
+| Different visitor | **2** |
+| Unknown post | **404** |
+
+`visitor_hash` is `sha256(ip \| user-agent \| AUTH_SECRET \| date)` — **no raw IP is
+stored**, and because the date is an input the salt rotates daily on its own, so
+yesterday's hashes cannot be correlated with today's.
+
+**The rule that protects the cache:** this endpoint must never call `revalidateBlog()`.
+Invalidating on every pageview would be worse than having no cache at all. Instead it
+returns the fresh total and `ViewCounter` renders it, so the number is live without the
+page cache ever knowing. Verified: the route contains no revalidation call.
+
+`ViewCounter` fires on mount rather than during render, so `<Link>` prefetch — which
+fetches the RSC payload without mounting — cannot inflate the count.
+
+**Analytics** — `@vercel/analytics` and `@vercel/speed-insights` in the root layout.
+Cookieless, so no consent banner. Still needs **H7**: enabling both in the Vercel
+dashboard. Installing the packages alone does nothing.
 
 ## Phase completion checklist
 
