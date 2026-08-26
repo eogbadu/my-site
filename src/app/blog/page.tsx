@@ -46,7 +46,7 @@ export default async function BlogIndexPage() {
           {posts.map((p) => (
             <li key={p.slug} className="flex gap-5 py-6">
               <Link href={`/blog/${p.slug}`} tabIndex={-1} aria-hidden="true">
-                <PostThumb src={p.coverImage} title={p.title} className="w-20 h-20 sm:w-24 sm:h-24" />
+                <PostThumb src={p.coverImage} title={p.title} />
               </Link>
 
               <div className="min-w-0 flex-1">

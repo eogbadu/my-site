@@ -40,7 +40,12 @@ export default async function FeaturedPosts({ limit = 3 }: { limit?: number }) {
         {posts.map((p) => (
           <li key={p.slug} className="flex gap-4 py-5">
             <Link href={`/blog/${p.slug}`} tabIndex={-1} aria-hidden="true">
-              <PostThumb src={p.coverImage} title={p.title} className="w-16 h-16" />
+              <PostThumb
+                src={p.coverImage}
+                title={p.title}
+                width="w-36 sm:w-44"
+                sizes="(min-width: 640px) 176px, 144px"
+              />
             </Link>
 
             <div className="min-w-0 flex-1">
