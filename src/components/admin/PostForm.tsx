@@ -119,13 +119,16 @@ export default function PostForm({
 
       <div>
         <label className="block text-sm mb-1" htmlFor="coverImage">
-          Cover image
+          Cover image{" "}
+          <span className="text-ink-faint font-normal">
+            — optional; defaults to the first image in the post
+          </span>
         </label>
         <input
           id="coverImage" name="coverImage" className={`${field} font-mono text-xs`}
           value={values.coverImage}
           onChange={(e) => setValues((v) => ({ ...v, coverImage: e.target.value }))}
-          placeholder="https://…  — leave empty to use the placeholder"
+          placeholder="https://…  — leave empty to use the first image in the post"
         />
         <div className="mt-2">
           {/* Same uploader as the body, but the URL lands in this field rather

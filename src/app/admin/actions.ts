@@ -8,6 +8,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { posts } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
+import { firstImageFrom } from "@/lib/first-image";
 import { validateMdx } from "@/lib/mdx";
 import { revalidateBlog } from "@/lib/revalidate";
 import { slugify } from "@/lib/slug";
@@ -69,7 +70,10 @@ function toRow(data: PostInput) {
     title: data.title,
     slug: data.slug,
     excerpt: data.excerpt || null,
-    coverImage: data.coverImage || null,
+    // An explicit cover wins; otherwise the first image in the body becomes the
+    // listing thumbnail, so dropping an image into a post is enough and the same
+    // URL never has to be entered twice.
+    coverImage: data.coverImage || firstImageFrom(data.body) || null,
     body: data.body,
     tags: data.tags,
     // Derived on write, never guessed back from the slug on read.

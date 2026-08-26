@@ -19,6 +19,19 @@ import { posts } from "./schema";
 const HOUR = 3600;
 
 /**
+ * Bump this whenever the SHAPE of a cached row changes.
+ *
+ * unstable_cache keys by the array passed to it, and Vercel's Data Cache survives
+ * deploys. So adding a column to a query does NOT invalidate existing entries —
+ * they keep returning the old shape, with the new field simply `undefined`, until
+ * the revalidate window expires. That is how adding coverImage silently produced
+ * placeholder thumbnails everywhere despite the data being present.
+ *
+ * Changing this string is part of changing a query's selected columns.
+ */
+const SHAPE = "v2-cover";
+
+/**
  * `publishedAt` is an ISO string, not a Date.
  *
  * unstable_cache serialises its return value to JSON, so a Date survives the
@@ -77,7 +90,7 @@ export const getPublishedPosts = unstable_cache(
       .orderBy(desc(posts.publishedAt));
     return rows.map((r) => ({ ...r, publishedAt: iso(r.publishedAt) }));
   },
-  ["published-posts"],
+  ["published-posts", SHAPE],
   { revalidate: HOUR, tags: ["posts"] }
 );
 
@@ -104,7 +117,7 @@ export const getPostBySlug = (slug: string) =>
         viewCount: r.viewCount,
       };
     },
-    ["post", slug],
+    ["post", slug, SHAPE],
     { revalidate: HOUR, tags: ["posts", `post:${slug}`] }
   )();
 
@@ -124,7 +137,7 @@ export const getPostsByTagSlug = (tagSlug: string) =>
         .orderBy(desc(posts.publishedAt));
       return rows.map((r) => ({ ...r, publishedAt: iso(r.publishedAt) }));
     },
-    ["posts-by-tag", tagSlug],
+    ["posts-by-tag", tagSlug, SHAPE],
     { revalidate: HOUR, tags: ["posts"] }
   )();
 
@@ -151,7 +164,7 @@ export const getTagCounts = unstable_cache(
       count: Number(r.count),
     }));
   },
-  ["tag-counts"],
+  ["tag-counts", SHAPE],
   { revalidate: HOUR, tags: ["posts"] }
 );
 
