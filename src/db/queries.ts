@@ -31,6 +31,7 @@ export type PostListItem = {
   slug: string;
   title: string;
   excerpt: string | null;
+  coverImage: string | null;
   tags: string[];
   tagSlugs: string[];
   publishedAt: string | null;
@@ -42,6 +43,7 @@ export type PostDetail = {
   slug: string;
   title: string;
   excerpt: string | null;
+  coverImage: string | null;
   body: string;
   tags: string[];
   tagSlugs: string[];
@@ -59,6 +61,7 @@ const listColumns = {
   slug: posts.slug,
   title: posts.title,
   excerpt: posts.excerpt,
+  coverImage: posts.coverImage,
   tags: posts.tags,
   tagSlugs: posts.tagSlugs,
   publishedAt: posts.publishedAt,
@@ -93,6 +96,7 @@ export const getPostBySlug = (slug: string) =>
         slug: r.slug,
         title: r.title,
         excerpt: r.excerpt,
+        coverImage: r.coverImage,
         body: r.body,
         tags: r.tags,
         tagSlugs: r.tagSlugs,

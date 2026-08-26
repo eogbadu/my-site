@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import PostThumb from "@/components/PostThumb";
 import SectionHeader from "@/components/SectionHeader";
 import { getPostsByTagSlug } from "@/db/queries";
 import { buildMetadata } from "@/lib/metadata";
@@ -53,7 +54,12 @@ export default async function TagPage({ params }: Props) {
 
       <ul className="divide-y divide-rule border-t border-rule">
         {posts.map((p) => (
-          <li key={p.slug} className="py-6">
+          <li key={p.slug} className="flex gap-5 py-6">
+            <Link href={`/blog/${p.slug}`} tabIndex={-1} aria-hidden="true">
+              <PostThumb src={p.coverImage} title={p.title} className="w-20 h-20" />
+            </Link>
+
+            <div className="min-w-0 flex-1">
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-x-6 gap-y-1">
               <h2 className="font-display text-xl tracking-[-0.01em]">
                 <Link
@@ -72,6 +78,7 @@ export default async function TagPage({ params }: Props) {
                 {p.excerpt}
               </p>
             )}
+            </div>
           </li>
         ))}
       </ul>

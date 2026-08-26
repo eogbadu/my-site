@@ -12,6 +12,7 @@ export interface PostFormValues {
   title: string;
   slug: string;
   excerpt: string;
+  coverImage: string;
   body: string;
   tags: string;
   status: "draft" | "published";
@@ -114,6 +115,47 @@ export default function PostForm({
           maxLength={400}
         />
         <Err name="excerpt" />
+      </div>
+
+      <div>
+        <label className="block text-sm mb-1" htmlFor="coverImage">
+          Cover image
+        </label>
+        <input
+          id="coverImage" name="coverImage" className={`${field} font-mono text-xs`}
+          value={values.coverImage}
+          onChange={(e) => setValues((v) => ({ ...v, coverImage: e.target.value }))}
+          placeholder="https://…  — leave empty to use the placeholder"
+        />
+        <div className="mt-2">
+          {/* Same uploader as the body, but the URL lands in this field rather
+              than being inserted into the content. */}
+          <MediaUpload
+            onInsert={(snippet) => {
+              const url = snippet.match(/\]\((https?:[^)]+)\)/)?.[1]
+                ?? snippet.match(/src="([^"]+)"/)?.[1];
+              if (url) setValues((v) => ({ ...v, coverImage: url }));
+            }}
+          />
+        </div>
+        {values.coverImage && (
+          <p className="mt-2 flex items-center gap-3 text-xs text-ink-faint">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={values.coverImage}
+              alt=""
+              className="h-12 w-12 rounded border border-rule object-cover"
+            />
+            <button
+              type="button"
+              onClick={() => setValues((v) => ({ ...v, coverImage: "" }))}
+              className="text-danger hover:underline underline-offset-4 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+              Remove cover
+            </button>
+          </p>
+        )}
+        <Err name="coverImage" />
       </div>
 
       <div>

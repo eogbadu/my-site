@@ -44,6 +44,7 @@ async function readForm(formData: FormData) {
     title: formData.get("title"),
     slug: formData.get("slug"),
     excerpt: formData.get("excerpt") ?? "",
+    coverImage: formData.get("coverImage") ?? "",
     body: formData.get("body"),
     tags: parseTags(formData.get("tags")),
     status: formData.get("status"),
@@ -68,6 +69,7 @@ function toRow(data: PostInput) {
     title: data.title,
     slug: data.slug,
     excerpt: data.excerpt || null,
+    coverImage: data.coverImage || null,
     body: data.body,
     tags: data.tags,
     // Derived on write, never guessed back from the slug on read.

@@ -13,6 +13,8 @@ export const postSchema = z.object({
       "Slug may contain only lowercase letters, numbers, and single hyphens."
     ),
   excerpt: z.string().trim().max(400).optional().or(z.literal("")),
+  /** Absolute blob URL or a site-relative path; empty means use the placeholder. */
+  coverImage: z.string().trim().max(500).optional().or(z.literal("")),
   body: z.string().trim().min(1, "Post content is required."),
   /** Comma-separated in the form; split before parsing. */
   tags: z.array(z.string().trim().min(1)).max(12).default([]),

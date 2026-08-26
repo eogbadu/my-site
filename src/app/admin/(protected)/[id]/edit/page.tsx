@@ -28,6 +28,7 @@ export default async function EditPostPage({
           title: post.title,
           slug: post.slug,
           excerpt: post.excerpt ?? "",
+          coverImage: post.coverImage ?? "",
           body: post.body,
           tags: post.tags.join(", "),
           status: post.status,

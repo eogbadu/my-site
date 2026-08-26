@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import PostThumb from "@/components/PostThumb";
 import SectionHeader from "@/components/SectionHeader";
 import { getPublishedPosts } from "@/db/queries";
 
@@ -37,7 +38,12 @@ export default async function FeaturedPosts({ limit = 3 }: { limit?: number }) {
 
       <ul className="divide-y divide-rule border-t border-rule">
         {posts.map((p) => (
-          <li key={p.slug} className="py-5">
+          <li key={p.slug} className="flex gap-4 py-5">
+            <Link href={`/blog/${p.slug}`} tabIndex={-1} aria-hidden="true">
+              <PostThumb src={p.coverImage} title={p.title} className="w-16 h-16" />
+            </Link>
+
+            <div className="min-w-0 flex-1">
             <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-x-6 gap-y-1">
               <h3 className="font-display text-lg tracking-[-0.01em]">
                 <Link
@@ -55,6 +61,7 @@ export default async function FeaturedPosts({ limit = 3 }: { limit?: number }) {
                 {p.excerpt}
               </p>
             )}
+            </div>
           </li>
         ))}
       </ul>

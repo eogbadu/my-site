@@ -17,6 +17,7 @@ export default async function NewPostPage() {
           title: "",
           slug: "",
           excerpt: "",
+          coverImage: "",
           body: "",
           tags: "",
           status: "draft",
