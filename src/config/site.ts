@@ -75,7 +75,8 @@ export const siteConfig = {
   ],
 
   resumePdf: "/resume.pdf",
-  avatar: "/avatar.webp",
+  /** Portrait used in the About page hero. */
+  avatar: "/about.webp",
   /** 4:5 editorial crop used in the homepage hero. */
   portrait: "/portrait-muted.webp",
 
