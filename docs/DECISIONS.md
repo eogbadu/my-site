@@ -217,3 +217,22 @@ pure white plus default slate is precisely what every Tailwind starter looks lik
 **Favicon:** serif "EO" on ink, matching the palette. Ships as `favicon.ico` (an ICO
 container wrapping a 256px PNG, assembled by hand since sharp cannot write ICO), plus
 `icon.png` and an unrounded `apple-icon.png` for iOS to mask itself.
+
+---
+
+## D12 — Homepage portrait: uncropped studio shot, no treatment
+
+The D11-era hero used `portrait-muted.webp`, a 4:5 crop of a casual patio photo, heavily
+desaturated by `scripts/build-portrait.mts` so the busy warm background wouldn't compete
+with the page. A professional studio headshot on a flat grey ground replaced it, which
+removes the problem the treatment existed to solve.
+
+**Shown as is, uncropped** — the owner's call. 4:5 crops were tried (three-quarter, and a
+tighter head-and-shoulders that reads better at 290px) and declined. Because the box uses
+`object-cover`, "uncropped" means the box takes the photo's own ratio,
+`aspect-[1034/1520]`, rather than 4:5; otherwise the browser trims the top of the head.
+Change both together if the image is swapped again.
+
+The file is `home.webp` (640x941, q82, ~19 KB) under a new name for the same cache reason as
+the About swap. `build-portrait.mts` was deleted with it: its source `avatar.webp` was
+already gone, and nothing referenced its outputs.

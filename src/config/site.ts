@@ -77,8 +77,8 @@ export const siteConfig = {
   resumePdf: "/resume.pdf",
   /** Portrait used in the About page hero. */
   avatar: "/about.webp",
-  /** 4:5 editorial crop used in the homepage hero. */
-  portrait: "/portrait-muted.webp",
+  /** Uncropped studio headshot (640x941) used in the homepage hero. */
+  portrait: "/home.webp",
 
   nav: [
     { name: "Home", href: "/" },

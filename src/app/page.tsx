@@ -77,12 +77,14 @@ export default function HomePage() {
           </div>
 
           {/*
-            Portrait, not an avatar: a 4:5 editorial crop rather than a circle with
-            a blur glow behind it. A round headshot beside a headline is the most
-            common personal-site layout there is, and it read as template.
+            Portrait, not an avatar: a rectangular studio shot rather than a circle
+            with a blur glow behind it. A round headshot beside a headline is the
+            most common personal-site layout there is, and it read as template.
+            The box takes the photo's own 1034:1520 ratio so object-cover never
+            trims it — keep the two in sync if the image changes.
           */}
           <div className="order-first md:order-last mx-auto w-40 sm:w-52 md:w-full md:max-w-[290px]">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-rule">
+            <div className="relative aspect-[1034/1520] overflow-hidden rounded-lg border border-rule">
               <Image
                 src={siteConfig.portrait}
                 alt={siteConfig.name}
